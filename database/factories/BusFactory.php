@@ -18,16 +18,19 @@ class BusFactory extends Factory
     public function definition()
     {
         return [
-
+            'IdXe' => 'B' . $this->faker->unique()->numberBetween(1, 2000),
             'So_xe' => $this->faker->numberBetween(11, 99) .
                 $this->faker->regexify('[A-Z]{1}') . '-' .
                 $this->faker->numerify('#####'),
 
-            'Hieu_xe' => $this->faker->randomElement(['Huyndai', 'Toyota', 'Mazda', 'Ford', 'Kia', 'Honda']),
+            'IdNX' => 'BC' . $this->faker->numberBetween(1, 30),
 
             'Doi_xe' => $this->faker->numberBetween(1990, 2022),
 
-            'So_ghe' => 32,
+            'Loai_xe' => $this->faker->randomElement(['Giường nằm', 'Ghế ngồi', 'Limousine']),
+
+            // 'So_cho_ngoi' => $this->faker->randomElement([24, 29, 32, 45, 50]),
+            'So_cho_ngoi' => 42,
         ];
     }
 }
