@@ -17,10 +17,16 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('image')->nullable();
+            $table->string('sdt')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('IdNX', 10)->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            // foreign key
+            $table->foreign('IdNX')->references('IdNX')->on('bus_companies');
         });
     }
 
