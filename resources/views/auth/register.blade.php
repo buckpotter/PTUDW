@@ -23,14 +23,18 @@
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
 
+            <!-- ID nhà xe -->
+            <div class="mt-4">
+                <x-input-label for="IdNX" :value="__('Id Nhà Xe')" />
+                <x-text-input id="IdNX" class="block mt-1 w-full" type="text" name="IdNX" :value="old('IdNX')" required />
+                <x-input-error :messages="$errors->get('IdNX')" class="mt-2" />
+            </div>
+
             <!-- Password -->
             <div class="mt-4">
                 <x-input-label for="password" :value="__('Password')" />
 
-                <x-text-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="new-password" />
+                <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
 
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
@@ -39,9 +43,7 @@
             <div class="mt-4">
                 <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
 
-                <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required />
+                <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
 
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
             </div>
