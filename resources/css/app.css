@@ -3,6 +3,40 @@
 @tailwind utilities;
 
 html {
-  box-sizing: border-box;
-  scroll-behavior: smooth;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    @apply bg-[#939393];
+}
+
+.sub-header {
+    @apply text-xl font-extrabold text-sky-800;
+}
+
+.header {
+    @apply md:text-5xl font-extrabold text-sky-800 text-2xl;
+}
+
+.flex-col-gap4 {
+    @apply flex flex-col gap-4 items-center;
+}
+
+.flex-row-gap4 {
+    @apply flex flex-row gap-4 items-center;
+}
+
+.flex-between-center {
+    @apply flex justify-between items-center mb-4;
+}
+
+/* chart */
+#income {
+}
+
+#bus-type,
+#ticket-status {
+    max-width: 400px;
+    max-height: 400px;
 }
