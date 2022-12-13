@@ -1,23 +1,8 @@
 <x-layout>
-  <div class="grid grid-rows-1 md:grid-cols-2 xl:grid-cols-4 justify-between gap-4">
-    <div class="grid grid-rows-1 md:grid-cols-2 xl:grid-cols-4 justify-between gap-4">
-      @foreach ($data as $key=>$value)
-      <div class="inline-flex items-center bg-white border rounded-lg shadow-md hover:bg-gray-200 p-2">
-        <img class="w-[100px]" src="{{ asset($value[1]) }}">
-
-        <div class="flex flex-col justify-between p-4 leading-normal">
-          <h2 class="mb-2 font-bold tracking-tight text-gray-900">{{ $key }}</h2>
-          <p class="mb-3 text-gray-500">{{ $value[0] }}</p>
-        </div>
-      </div>
-      @endforeach
-    </div>
-  </div>
-
+  <h1 class="header">Nhà xe {{ $Ten_NX }}</h1>
   <div class="bg-white mt-4">
     <canvas id="admin-bus-companies-income"></canvas>
     <canvas id="admin-potential-users"></canvas>
-    <canvas id="admin-sold-tickets"></canvas>
   </div>
 
   <script>
@@ -25,7 +10,6 @@
 
     const adminBusCompIncomeEl = document.getElementById('admin-bus-companies-income');
     const adminPotentialUsersEl = document.getElementById('admin-potential-users');
-    const adminSoldTicketsEl = document.getElementById('admin-sold-tickets');
 
     // plugins object dùng cho định dạng tiền tệ và hiển thị giá trị tiền tệ trên chart
     plugins = {
@@ -129,47 +113,5 @@
         plugins: plugins
       }
     })
-
-    // Lượng vé đã bán và doanh theo tháng trong năm 2022 của nhà xe admin đang đăng nhập
-    // data = [];
-    // labels = [];
-    // <?php
-        // foreach ($adminSoldTickets as $ast) {
-        //   echo "data.push({$ast->count});";
-        //   echo "labels.push('Tháng {$ast->month}');";
-        // }
-        // 
-        ?>
-    // new Chart('admin-sold-tickets', {
-    //   data: {
-    //     labels: labels,
-    //     datasets: [{
-    //       type: 'line',
-    //       data: data2,
-    //       label: 'Lượng vé đã bán và doanh thu theo tháng trong năm 2022',
-    //       borderWidth: 3,
-    //       fill: true,
-    //     }]
-    //   },
-    //   options: {
-    //     scales: {
-    //       y: {
-    //         beginAtZero: true,
-    //       }
-    //     },
-
-    //     plugins: {
-    //       datalabels: {
-    //         anchor: 'end',
-    //         align: 'top',
-
-    //         font: {
-    //           size: 12,
-    //           weight: 'bold'
-    //         }
-    //       }
-    //     },
-    //   }
-    // })
   </script>
 </x-layout>
