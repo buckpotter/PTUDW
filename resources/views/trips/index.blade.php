@@ -1,33 +1,35 @@
 <x-layout>
   <x-flash-message />
+  <x-error-flash-message />
   <h1 class="header">Chuyến xe</h1>
-  <div class="flex justify-between items-center">
-    <x-insert-btn>
+
+  <x-search>
+    <x-slot name="insertBtnUrl">
       {{ route('trips.create') }}
-    </x-insert-btn>
-    <div class="inline-flex gap-4">
-      <input type="text" placeholder="Tìm kiếm" class="px-2 rounded-md" />
-      <button type="submit"><i class="bi bi-search text-blue-500 text-xl"></i>
-      </button>
-    </div>
-  </div>
-  <table>
+    </x-slot>
+
+    <x-slot name="search">{{ $search }}</x-slot>
+
+    {{ route('trips.index') }}
+  </x-search>
+
+  <table class="main-table">
     <thead>
       <tr>
-        <th>STT</th>
-        <th>ID chuyến</th>
+        <!-- <th>STT</th> -->
+        <th>@sortablelink('IdChuyen', 'Mã chuyến')<i class="bi bi-arrow-down-up text-sm"></th>
         <th>Tuyến</th>
-        <th>Xe</th>
+        <th>Số xe</th>
         <th>Nhà xe</th>
         <th>Xuất phát</th>
         <th>Đến</th>
-        <th>Giá vé</th>
+        <th>@sortablelink('GiaVe', 'Giá vé')<i class="bi bi-arrow-down-up text-sm"></th>
       </tr>
     </thead>
     <tbody>
       @foreach ($trips as $trip)
       <tr>
-        <td>{{ $loop->iteration }}</td>
+        <!-- <td>{{ $loop->iteration }}</td> -->
         <td> <a class="hover:underline" href="{{ route('trips.show', $trip->IdChuyen) }}">
             {{ $trip->IdChuyen }}</a></td>
         <td>{{ $trip->TenTuyen }}</td>
@@ -38,7 +40,7 @@
         </td>
         <td>
           {{ $trip->NgayDen }} {{ $trip->GioDen }}
-        <td>{{ number_format($trip->GiaVe ) }} VNĐ</td>
+        <td>{{ number_format($trip->GiaVe ) }} đ</td>
       </tr>
       @endforeach
     </tbody>
