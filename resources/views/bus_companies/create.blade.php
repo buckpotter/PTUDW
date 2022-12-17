@@ -1,48 +1,51 @@
 <x-layout>
   <h1 class="header">Thêm nhà xe</h1>
 
-  <form action="{{ route('bus_companies.store') }}" method="POST" enctype="multipart/form-data" class="max-w-[500px] my-4">
-    @csrf
+  <x-form>
+    <x-slot name="action">{{ route('bus_companies.store') }}</x-slot>
 
-    <div class="flex-between-center">
-      <label for="Ten_NX">Tên nhà xe:</label>
-      <input class="text-black mb-2" type="text" name="Ten_NX" value="{{ old('Ten_NX') }}" placeholder="Hồng Tâm">
+    <x-slot name="header">Thêm nhà xe</x-slot>
+
+    <x-input-floating-label>
+      <x-slot name="type">text</x-slot>
+      <x-slot name="inputName">Ten_NX</x-slot>
+      <x-slot name="value">{{ old('Ten_NX') }}</x-slot>
+      Tên nhà xe
+    </x-input-floating-label>
+
+    <x-input-floating-label>
+      <x-slot name="type">text</x-slot>
+      <x-slot name="inputName">sdt</x-slot>
+      <x-slot name="value">{{ old('sdt') }}</x-slot>
+
+      Số điện thoại
+    </x-input-floating-label>
+
+    <x-input-floating-label>
+      <x-slot name="type">email</x-slot>
+      <x-slot name="inputName">email</x-slot>
+      <x-slot name="value">{{ old('email') }}</x-slot>
+      Địa chỉ email
+    </x-input-floating-label>
+
+    <x-input-floating-label>
+      <x-slot name="type">text</x-slot>
+      <x-slot name="inputName">DichVu</x-slot>
+      <x-slot name="value">{{ old('DichVu') }}</x-slot>
+      Dịch vụ
+    </x-input-floating-label>
+
+    <x-submit-btn>Thêm</x-submit-btn>
+  </x-form>
+
+  @if ($errors->any())
+    <div class="mt-4 p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg max-w-[400px] mx-auto" role="alert">
+      <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+      </ul>
     </div>
-
-    <div class="flex-between-center">
-      <label for="sdt">Số điện thoại:</label>
-      <input class="text-black mb-2" type="text" name="sdt" value="{{ old('sdt') }}" placeholder="0123456789">
-    </div>
-
-    <div class="flex-between-center">
-      <label for="email">Email:</label>
-      <input class="text-black mb-2" type="text" name="email" value="{{ old('email') }}" placeholder="youremail@gmail.com">
-    </div>
-
-    <div class="flex-between-center">
-      <label for="DichVu">Dịch vụ:</label>
-      <input class="text-black mb-2" type="text" name="DichVu" value="{{ old('DichVu') }}" placeholder="Nước suối">
-    </div>
-
-    <div>
-      @error('Ten_NX')
-      <div class="text-red-700">{{ $message }}</div>
-      @enderror
-      @error('sdt')
-      <div class="text-red-700">{{ $message }}</div>
-      @enderror
-      @error('email')
-      <div class="text-red-700">{{ $message }}</div>
-      @enderror
-      @error('DichVu')
-      <div class="text-red-700">{{ $message }}</div>
-      @enderror
-    </div>
-
-
-    <button class="p-2 cursor-pointer bg-green-500 hover:opacity-70 hover:scale-105 duration-100" type="submit">
-      Thêm
-    </button>
-  </form>
+    @endif
 
 </x-layout>

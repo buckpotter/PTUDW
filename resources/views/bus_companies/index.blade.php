@@ -1,37 +1,36 @@
 <x-layout>
 
   <x-flash-message />
+  <x-error-flash-message />
 
   <h1 class="header">Nhà xe</h1>
 
-  <div class="flex justify-between items-center my-8">
-    <x-insert-btn>
+  <!-- search component -->
+  <x-search>
+    <x-slot name='insertBtnUrl'>
       {{ route('bus_companies.create') }}
-    </x-insert-btn>
-    <div class="inline-flex gap-4">
-      <form>
-        <input placeholder="Tìm kiếm" class="px-2 rounded-md" name="search" type="search" value="{{ $search }}" />
-        <button type="submit"><i class="bi bi-search text-blue-500 text-xl"></i>
-        </button>
-      </form>
-    </div>
-  </div>
+    </x-slot>
 
-  <table>
+    <x-slot name='search'>{{ $search }}</x-slot>
+
+    {{ route('bus_companies.index') }}
+  </x-search>
+
+  <table class="main-table">
     <thead>
       <tr>
-        <th>STT</th>
-        <th>ID</th>
-        <th>Tên nhà xe</th>
-        <th>Số điện thoại</th>
-        <th>Email</th>
-        <th>Dịch vụ</th>
+        <!-- <th>STT</th> -->
+        <th>@sortablelink('IdNX', 'Mã nhà xe')<i class="bi bi-arrow-down-up text-sm"></th>
+        <th>@sortablelink('Ten_NX', 'Tên nhà xe')<i class="bi bi-arrow-down-up text-sm"></th>
+        <th>@sortablelink('sdt', 'Số điện thoại')<i class="bi bi-arrow-down-up text-sm"></th>
+        <th>@sortablelink('email', 'Email')<i class="bi bi-arrow-down-up text-sm"></th>
+        <th>@sortablelink('DichVu', 'Dịch Vụ')<i class="bi bi-arrow-down-up text-sm"></th>
       </tr>
     </thead>
     <tbody>
       @foreach ($busCompanies as $busCompany)
       <tr>
-        <td>{{ $loop->iteration }}</td>
+        <!-- <td>{{ $loop->iteration }}</td> -->
         <td>
           <a class="hover:underline" href="{{ route('bus_companies.show', $busCompany->IdNX) }}">{{ $busCompany->IdNX
             }}</a>
@@ -50,4 +49,14 @@
     {{ $busCompanies->links() }}
   </div>
 
+
+
+  <script type="text/javascript">
+    document.getElementById('form').addEventListener('submit', function() {
+      // e.preventDefault();
+      let search = document.getElementById('search');
+      let value = search.value;
+      search.value = value;
+    });
+  </script>
 </x-layout>

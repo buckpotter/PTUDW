@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class BusCompany extends Model
 {
-    use HasFactory;
+    use HasFactory, Sortable;
 
     protected $primaryKey = 'IdNX';
     protected $keyType = 'string';
@@ -19,6 +20,14 @@ class BusCompany extends Model
         'email',
         'DichVu',
         // 'IdRate',
+    ];
+
+    public $sortable = [
+        'IdNX',
+        'Ten_NX',
+        'sdt',
+        'email',
+        'DichVu',
     ];
 
     public function rates()

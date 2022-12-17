@@ -8,8 +8,8 @@ use App\Models\Trip;
 use App\Models\User;
 use App\Models\Ticket;
 use App\Models\BusCompany;
-use App\Models\TicketDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AdminBusCompaniesController extends Controller
@@ -19,23 +19,33 @@ class AdminBusCompaniesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware(['auth'])->only(['index', 'create', 'store', 'edit', 'update', 'destroy', 'show', 'search']);
+    }
+
     public function index(Request $request)
     {
-        // return view('bus_companies.index', [
-        //     'busCompanies' => BusCompany::paginate(10)
-        // ]);
-
         $search_text = $request['search'] ?? "";
         $busCompanies = NULL;
 
         if ($search_text == "") {
-            $busCompanies = BusCompany::paginate(10);
+            $busCompanies = BusCompany::sortable()->paginate(15);
         } else {
-            $busCompanies = BusCompany::where('Ten_NX', 'like', "%$search_text%")
+            $busCompanies = BusCompany::sortable()
+                ->where('Ten_NX', 'like', "%$search_text%")
                 ->orwhere('email', 'like', "%$search_text%")
                 ->orWhere('sdt', 'like', "%$search_text%")
-                ->paginate(10);
+                ->paginate(15);
         }
+
+        // Buộc phải có để truyền thêm tham số search vào url, nếu không khi chuyển trang sẽ mất tham số search
+        $busCompanies->appends([
+            'search' => $search_text,
+            'sort' => $request['sort'] ?? 'IdNX',
+            'direction' => $request['direction'] ?? 'asc'
+        ]);
 
         return view('bus_companies.index', [
             'search' => $search_text,
@@ -50,6 +60,9 @@ class AdminBusCompaniesController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->IdNX != NULL)
+            return redirect()->route('bus_companies.index')->with('error', 'Bạn không thể thực hiện thao tác này!');
+
         return view('bus_companies.create');
     }
 
@@ -98,8 +111,12 @@ class AdminBusCompaniesController extends Controller
      */
     public function show($IdNX)
     {
+        // Đánh giá nhà xe
+        $rate = Rate::where('IdNX', $IdNX)->select(DB::raw('AVG(DanhGia) as avg'))->first()->avg;
+
         return view('bus_companies.show', [
-            'busCompany' => BusCompany::where('IdNX', $IdNX)->firstOrFail()
+            'busCompany' => BusCompany::where('IdNX', $IdNX)->firstOrFail(),
+            'rate' => $rate,
         ]);
     }
 
@@ -111,6 +128,10 @@ class AdminBusCompaniesController extends Controller
      */
     public function edit($IdNX)
     {
+        // chỉ được sửa thông tin của nhà xe mà mình quản lý
+        if (Auth::user()->IdNX != NULL && Auth::user()->IdNX != $IdNX)
+            return redirect()->route('bus_companies.show', $IdNX)->with('error', 'Bạn không thể thực hiện thao tác này!');
+
         return view('bus_companies.edit', [
             'busCompany' => BusCompany::findOrFail($IdNX),
         ]);
@@ -131,6 +152,8 @@ class AdminBusCompaniesController extends Controller
             'email' => 'required|email',
             'DichVu' => 'required',
         ]);
+
+
         BusCompany::where('IdNX', $IdNX)->update([
             'Ten_NX' => $request->Ten_NX,
             'sdt' => $request->sdt,
@@ -139,7 +162,7 @@ class AdminBusCompaniesController extends Controller
         ]);
 
 
-        return redirect()->route('bus_companies.show', $IdNX)->with('messgae', 'Cập nhật thành công!');
+        return redirect()->route('bus_companies.show', $IdNX)->with('message', 'Cập nhật thành công!');
     }
 
     /**
@@ -150,6 +173,9 @@ class AdminBusCompaniesController extends Controller
      */
     public function destroy($IdNX)
     {
+        if (Auth::user()->IdNX != NULL && Auth::user()->IdNX != $IdNX)
+            return redirect()->route('bus_companies.show', $IdNX)->with('error', 'Bạn không thể thực hiện thao tác này!');
+
         // Xóa rate của nhà xe
         Rate::where('IdNX', $IdNX)->delete();
 
@@ -158,7 +184,6 @@ class AdminBusCompaniesController extends Controller
 
         // Xoá tất cả chuyến xe của nhà xe
         $buses = Bus::where('IdNX', $IdNX)->get()->toArray(); // Mảng chứa tất cả xe của nhà xe
-
 
         $trips = array(); // Mảng chứa tất cả chuyến xe của nhà xe
         foreach ($buses as $bus) {
@@ -186,5 +211,16 @@ class AdminBusCompaniesController extends Controller
         // Xóa nhà xe
         BusCompany::where('IdNX', $IdNX)->delete();
         return redirect()->route('bus_companies.index')->with('message', 'Xóa thành công!');
+    }
+
+    public function search(Request $request)
+    {
+        $busCompanies = BusCompany::where('Ten_NX', 'like', '%' . $request->search . '%')
+            ->orwhere('email', 'like', '%' . $request->search . '%')
+            ->paginate(10);
+
+        return view('bus_companies.index', [
+            'busCompanies' => $busCompanies,
+        ]);
     }
 }

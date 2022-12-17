@@ -1,51 +1,52 @@
 <x-layout>
 
-  <h1 class="header">Chỉnh sửa thông tin nhà xe </h1>
+  <h1 class="header">Chỉnh sửa thông tin nhà xe</h1>
 
-  <form action="{{ route('bus_companies.update', $busCompany->IdNX) }}" method="POST" enctype="multipart/form-data" class="max-w-[500px] my-4">
-    @csrf
+  <x-form>
     @method('PUT')
+    <x-slot name="action">{{ route('bus_companies.update', $busCompany->IdNX) }}</x-slot>
 
-    <div class="flex justify-between">
-      <label for="Ten_NX">Tên nhà xe:</label>
-      <input class="mb-2" type="text" name="Ten_NX" value="{{ $busCompany->Ten_NX }}">
-    </div>
+    <x-slot name="header">Nhà xe {{ $busCompany->IdNX }}</x-slot>
 
-    <div class="flex justify-between">
-      <label for="sdt">Số điện thoại</label>
-      <input class="mb-2" type="text" name="sdt" value="{{ $busCompany->sdt }}">
-    </div>
+    <x-input-floating-label>
+      <x-slot name="type">text</x-slot>
+      <x-slot name="inputName">Ten_NX</x-slot>
+      <x-slot name="value">{{ $busCompany->Ten_NX }}</x-slot>
+      Tên nhà xe
+    </x-input-floating-label>
 
-    <div class="flex justify-between">
-      <label for="email">Email</label>
-      <input class="mb-2" type="text" name="email" value="{{ $busCompany->email }}">
-    </div>
+    <x-input-floating-label>
+      <x-slot name="type">text</x-slot>
+      <x-slot name="inputName">sdt</x-slot>
+      <x-slot name="value">{{ $busCompany->sdt }}</x-slot>
+      Số điện thoại
+    </x-input-floating-label>
 
-    <div class="flex justify-between items-center">
-      <label for="DichVu">Dịch vụ</label>
-      <textarea class="mb-2" type="text" name="DichVu">{{ $busCompany->DichVu }}
-      </textarea>
-    </div>
+    <x-input-floating-label>
+      <x-slot name="type">email</x-slot>
+      <x-slot name="inputName">email</x-slot>
+      <x-slot name="value">{{ $busCompany->email }}</x-slot>
+      Địa chỉ email
+    </x-input-floating-label>
 
-    <div>
-      @error('Ten_NX')
-      <div class="text-red-700">{{ $message }}</div>
-      @enderror
-      @error('sdt')
-      <div class="text-red-700">{{ $message }}</div>
-      @enderror
-      @error('email')
-      <div class="text-red-700">{{ $message }}</div>
-      @enderror
-      @error('DichVu')
-      <div class="text-red-700">{{ $message }}</div>
-      @enderror
+    <x-input-floating-label>
+      <x-slot name="type">text</x-slot>
+      <x-slot name="inputName">DichVu</x-slot>
+      <x-slot name="value">{{ $busCompany->DichVu }}</x-slot>
+      Dịch vụ
+    </x-input-floating-label>
 
-    </div>
+    <x-submit-btn>Lưu</x-submit-btn>
+  </x-form>
 
-    <button class="p-2 cursor-pointer bg-[#537EC5] hover:opacity-70 hover:scale-105 duration-100" type="submit">
-      Lưu thay đổi
-    </button>
-  </form>
+  @if ($errors->any())
+  <div class="mt-4 p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg max-w-[400px] mx-auto" role="alert">
+    <ul>
+      @foreach ($errors->all() as $error)
+      <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+  @endif
 
 </x-layout>
