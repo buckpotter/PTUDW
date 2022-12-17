@@ -1,17 +1,17 @@
 <x-layout>
-  <div class="grid grid-rows-1 md:grid-cols-2 xl:grid-cols-4 justify-between gap-4">
-    <div class="grid grid-rows-1 md:grid-cols-2 xl:grid-cols-4 justify-between gap-4">
-      @foreach ($data as $key=>$value)
-      <div class="inline-flex items-center bg-white border rounded-lg shadow-md hover:bg-gray-200 p-2">
-        <img class="w-[100px]" src="{{ asset($value[1]) }}">
+  <x-error-flash-message />
 
-        <div class="flex flex-col justify-between p-4 leading-normal">
-          <h2 class="mb-2 font-bold tracking-tight text-gray-900">{{ $key }}</h2>
-          <p class="mb-3 text-gray-500">{{ $value[0] }}</p>
-        </div>
+  <div class="grid grid-rows-1 md:grid-cols-2 xl:grid-cols-4 justify-between gap-4">
+    @foreach ($data as $key=>$value)
+    <a href="{{ route($value[2]) }}" class="inline-flex items-center bg-white border rounded-lg shadow-md hover:bg-gray-200 p-2">
+      <img class="w-[100px]" src="{{ asset($value[1]) }}">
+
+      <div class="flex flex-col justify-between p-4 leading-normal">
+        <h2 class="mb-2 font-bold tracking-tight text-gray-900">{{ $key }}</h2>
+        <p class="mb-3 text-gray-500">{{ $value[0] }}</p>
       </div>
-      @endforeach
-    </div>
+    </a>
+    @endforeach
   </div>
 
   <div class="bg-white mt-4">
@@ -28,10 +28,31 @@
     const adminSoldTicketsEl = document.getElementById('admin-sold-tickets');
 
     // plugins object dùng cho định dạng tiền tệ và hiển thị giá trị tiền tệ trên chart
-    plugins = {
+
+    // pluginsTop dùng để hiển thị giá trị tiền tệ ở trên cột của chart
+    const pluginsTop = {
       datalabels: {
         anchor: 'end',
         align: 'top',
+
+        formatter: (value, context) => {
+          return value.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+          });
+        },
+
+        font: {
+          size: 12,
+          weight: 'bold'
+        }
+      }
+    };
+
+    // pluginsCenter dùng để hiển thị giá trị tiền tệ ở giữa cột của chart
+    const pluginsCenter = {
+      datalabels: {
+        align: 'center',
 
         formatter: (value, context) => {
           return value.toLocaleString('vi-VN', {
@@ -57,6 +78,7 @@
       }
     };
 
+    // gradient object cho định dạng màu cho chart
     let gradient = adminBusCompIncomeEl.getContext('2d').createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, 'rgba(173, 231, 146, 1)');
     gradient.addColorStop(1, 'rgba(173, 231, 146, 0.3)');
@@ -94,7 +116,7 @@
           }
         },
 
-        plugins: plugins
+        plugins: pluginsTop
       }
     });
 
@@ -119,57 +141,16 @@
         }]
       },
       options: {
+        indexAxis: 'y',
         scales: {
-          y: {
+          x: {
             beginAtZero: true,
             ticks: ticks
           }
         },
 
-        plugins: plugins
+        plugins: pluginsCenter
       }
     })
-
-    // Lượng vé đã bán và doanh theo tháng trong năm 2022 của nhà xe admin đang đăng nhập
-    // data = [];
-    // labels = [];
-    // <?php
-        // foreach ($adminSoldTickets as $ast) {
-        //   echo "data.push({$ast->count});";
-        //   echo "labels.push('Tháng {$ast->month}');";
-        // }
-        // 
-        ?>
-    // new Chart('admin-sold-tickets', {
-    //   data: {
-    //     labels: labels,
-    //     datasets: [{
-    //       type: 'line',
-    //       data: data2,
-    //       label: 'Lượng vé đã bán và doanh thu theo tháng trong năm 2022',
-    //       borderWidth: 3,
-    //       fill: true,
-    //     }]
-    //   },
-    //   options: {
-    //     scales: {
-    //       y: {
-    //         beginAtZero: true,
-    //       }
-    //     },
-
-    //     plugins: {
-    //       datalabels: {
-    //         anchor: 'end',
-    //         align: 'top',
-
-    //         font: {
-    //           size: 12,
-    //           weight: 'bold'
-    //         }
-    //       }
-    //     },
-    //   }
-    // })
   </script>
 </x-layout>

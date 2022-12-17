@@ -12,10 +12,28 @@
     const adminPotentialUsersEl = document.getElementById('admin-potential-users');
 
     // plugins object dùng cho định dạng tiền tệ và hiển thị giá trị tiền tệ trên chart
-    plugins = {
+    const pluginsTop = {
       datalabels: {
         anchor: 'end',
         align: 'top',
+
+        formatter: (value, context) => {
+          return value.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+          });
+        },
+
+        font: {
+          size: 12,
+          weight: 'bold'
+        }
+      }
+    };
+
+    const pluginsCenter = {
+      datalabels: {
+        align: 'center',
 
         formatter: (value, context) => {
           return value.toLocaleString('vi-VN', {
@@ -78,7 +96,7 @@
           }
         },
 
-        plugins: plugins
+        plugins: pluginsTop
       }
     });
 
@@ -103,14 +121,15 @@
         }]
       },
       options: {
+        indexAxis: 'y',
         scales: {
-          y: {
+          x: {
             beginAtZero: true,
             ticks: ticks
           }
         },
 
-        plugins: plugins
+        plugins: pluginsCenter
       }
     })
   </script>
