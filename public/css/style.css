@@ -1,37 +1,118 @@
-table {
+table.main-table {
     width: 100%;
     text-align: center;
     margin-bottom: 1.5rem;
 }
 
-table,
-tr,
-th,
-td {
+table.main-table,
+.main-table tr,
+.main-table th,
+.main-table td {
     border: 1px solid black;
     border-collapse: collapse;
     color: white;
 }
 
-th {
+.main-table th {
     font-size: 1.2rem;
     color: aliceblue;
 }
 
-td {
+.main-table td {
     text-shadow: -0.25px -0.25px 0 #000, 0.25px -0.25px 0 #000,
         -0.25px 0.25px 0 #000, 0.25px 0.25px 0 #000;
 }
 
-thead {
+.main-table thead {
     background-color: #353535;
 }
 
-th,
-td {
+.main-table th,
+.main-table td {
     padding: 4px;
 }
 
-tr:nth-child(even) {
+.main-table tr:nth-child(even) {
     background-color: #a4a4a4;
 }
+
+table.sub-table {
+    text-align: center;
+    color: white;
+    margin: 0 auto;
+    background-color: #eef1ff;
+    border-radius: 0 0 1rem 1rem;
+    margin-top: 2rem;
+}
+
+table.sub-table tbody {
+    outline: #353535 solid 1px;
+    border-radius: 0 0 1rem 1rem;
+    padding: 1rem;
+}
+
+table.sub-table caption {
+    background-color: #8787a3;
+    border-radius: 1rem 1rem 0 0;
+    outline: #353535 solid 1px;
+    text-shadow: -1px 1px 2px #000, 1px 1px 2px #000, 1px -1px 0 #000,
+        -1px -1px 0 #000;
+}
+
+.sub-table th {
+    color: #263159;
+}
+
+.sub-table td {
+    color: #000;
+}
+
+/* .sub-table td p {
+    margin-left: 1rem;
+} */
+
+.sub-table td,
+.sub-table th,
+.sub-table caption {
+    padding: 0.5rem 1rem;
+}
+
+canvas {
+    margin-bottom: 5rem;
+}
+
+/* Responsive chart */
+canvas {
+    max-width: 1200px;
+}
+
+@media (max-width: 1200px) {
+    canvas {
+        max-width: 1000px;
+    }
+}
+
+@media (max-width: 1000px) {
+    canvas {
+        max-width: 750px;
+    }
+}
+
+@media (max-width: 750px) {
+    canvas {
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 500px) {
+    canvas {
+        max-width: 375px;
+    }
+}
+
+@media (max-width: 375px) {
+    canvas {
+        max-width: 300px;
+    }
+}
+

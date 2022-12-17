@@ -9,14 +9,19 @@ html {
 
 body {
     @apply bg-[#939393];
+    /* 939393 */
 }
 
 .sub-header {
-    @apply text-xl font-extrabold text-sky-800;
+    @apply text-xl font-extrabold text-[#354259];
 }
 
 .header {
-    @apply md:text-5xl font-extrabold text-sky-800 text-2xl;
+    @apply md:text-5xl font-extrabold text-[#EEF1FF] text-2xl;
+}
+
+.dark-header {
+    @apply md:text-5xl font-extrabold text-blue-900 text-2xl;
 }
 
 .flex-col-gap4 {
@@ -31,12 +36,35 @@ body {
     @apply flex justify-between items-center mb-4;
 }
 
-/* chart */
-#income {
+.primary-btn {
+    @apply bg-sky-800 text-white font-bold py-2 px-4 rounded hover:opacity-80;
 }
 
+.success-btn {
+    @apply bg-green-500 text-white font-bold p-1 rounded hover:opacity-80;
+}
+
+.search-btn {
+    @apply bg-[#82C3EC] text-black font-bold py-2 px-4;
+    border-radius: 100% 0% 100% 0% / 80% 100% 0% 20%;
+}
+
+.clear-btn {
+    @apply bg-red-500 text-black font-bold py-2 px-4;
+    border-radius: 100% 0% 100% 0% / 0% 20% 80% 100%;
+}
+
+/* chart */
 #bus-type,
 #ticket-status {
     max-width: 400px;
     max-height: 400px;
+}
+
+table#admin-info {
+    width: 100%;
+}
+
+table#admin-info td {
+    padding: 0.5rem 0;
 }
