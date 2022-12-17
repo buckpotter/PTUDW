@@ -1,61 +1,59 @@
 <x-layout>
 
   <h1 class="header">Chỉnh sửa thông tin xe </h1>
-
-  <form action="{{ route('buses.update', $bus->IdXe) }}" method="POST" enctype="multipart/form-data" class="max-w-[500px] my-4">
-    @csrf
+  <x-form>
     @method('PUT')
+    <x-slot name="action">{{ route('buses.update', $bus->IdXe) }}</x-slot>
+    <x-slot name="header">Xe {{ $bus->IdXe }}</x-slot>
+    <x-input-floating-label>
+      <x-slot name="type">text</x-slot>
+      <x-slot name="inputName">So_xe</x-slot>
+      <x-slot name="value">{{ $bus->So_xe }}</x-slot>
+      Số xe
+    </x-input-floating-label>
 
-    <div class="flex-between-center">
-      <label for="So_xe">Số xe:</label>
-      <input class="text-black mb-2" type="text" name="So_xe" value="{{ $bus->So_xe }}">
+    <x-input-floating-label>
+      <x-slot name="type">number</x-slot>
+      <x-slot name="inputName">Doi_xe</x-slot>
+      <x-slot name="value">{{ $bus->Doi_xe }}</x-slot>
+      Đời xe
+    </x-input-floating-label>
+
+    <div class="grid grid-cols-2 gap-8 mb-6">
+      <div class="flex justify-start gap-4 items-center">
+        <label for="Loai_xe">Loại xe</label>
+        <select name="Loai_xe" id="Loai_xe">
+          <option value="Giường nằm" {{ $bus->Loai_xe == 'Giường nằm' ? 'selected' : '' }}>Giường nằm</option>
+          <option value="Ghế ngồi" {{ $bus->Loai_xe == 'Ghế ngồi' ? 'selected' : '' }}>Ghế ngồi</option>
+          <option value="Limousine" {{ $bus->Loai_xe == 'Limousine' ? 'selected' : '' }}>Limousine</option>
+        </select>
+      </div>
+
+      <div class="flex justify-start gap-4 items-center">
+        <label for="So_Cho_Ngoi">Số ghế:</label>
+        <select name="So_Cho_Ngoi" id="So_Cho_Ngoi">
+          <option value="36" selected>36</option>
+        </select>
+      </div>
     </div>
 
-    <div class="flex-between-center">
-      <label for="Doi_xe">Đời xe</label>
-      <input class="text-black mb-2" type="number" name="Doi_xe" value="{{ $bus->Doi_xe }}">
-    </div>
+    <x-input-floating-label>
+      <x-slot name="type">text</x-slot>
+      <x-slot name="inputName">IdNX</x-slot>
+      <x-slot name="value">{{ $bus->IdNX }}</x-slot>
+      Mã nhà xe
+    </x-input-floating-label>
 
-    <div class="flex-between-center">
-      <label for="Loai_xe">Loại xe:</label>
-      <select name="Loai_xe" id="Loai_xe" class="mb-2">
-        <option value="Giường nằm" {{ $bus->Loai_xe == 'Giường nằm' ? 'selected' : '' }}>Giường nằm</option>
-        <option value="Ghế ngồi" {{ $bus->Loai_xe == 'Ghế ngồi' ? 'selected' : '' }}>Ghế ngồi</option>
-        <option value="Limousine" {{ $bus->Loai_xe == 'Limousine' ? 'selected' : '' }}>Limousine</option>
-      </select>
-    </div>
+    <x-submit-btn>Lưu</x-submit-btn>
+  </x-form>
 
-    <div class="flex-between-center">
-      <label for="So_Cho_Ngoi">Số ghế</label>
-      <input type="number" name="So_Cho_Ngoi" value="{{ $bus->So_Cho_Ngoi }}">
-    </div>
-
-
-    <div class="flex-between-center">
-      <label for="IdNX">Mã nhà xe</label>
-      <input class="text-black mb-2" type="text" name="IdNX" value="{{ $bus->IdNX }}">
-    </div>
-
-    <button class="p-2 cursor-pointer bg-[#537EC5] hover:opacity-70 hover:scale-105 duration-100" type="submit">
-      Lưu thay đổi
-    </button>
-
-    <div>
-      @error('So_xe')
-      <p class="text-red-500">{{ $message }}</p>
-      @enderror
-      @error('Doi_xe')
-      <p class="text-red-500">{{ $message }}</p>
-      @enderror
-      @error('Loai_xe')
-      <p class="text-red-500">{{ $message }}</p>
-      @enderror
-      @error('So_Cho_Ngoi')
-      <p class="text-red-500">{{ $message }}</p>
-      @enderror
-      @error('IdNX')
-      <p class="text-red-500">{{ $message }}</p>
-      @enderror
-  </form>
-
+  @if ($errors->any())
+  <div class="mt-4 p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg max-w-[400px] mx-auto" role="alert">
+    <ul>
+      @foreach ($errors->all() as $error)
+      <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+  @endif
 </x-layout>

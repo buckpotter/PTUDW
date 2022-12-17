@@ -5,16 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Bus;
 use App\Models\Ticket;
 use App\Models\BusCompany;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AdminBusesController extends Controller
 {
     // middleware
     public function __construct()
     {
-        $this->middleware('auth')->only(['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']);
+        $this->middleware('auth')->only(['index', 'create', 'store', 'edit', 'update', 'destroy', 'show', 'search']);
     }
 
     /**
@@ -22,13 +23,38 @@ class AdminBusesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        /* all() and get() output the same thing in this case but
-        get() allow you to use chaining methods while all() do not */
-        $buses = DB::table('buses')->select('buses.*', 'bus_companies.Ten_NX')->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')->paginate(15);
+
+        $search_text = $request['search'] ?? "";
+        $buses = NULL;
+
+        if ($search_text == "") {
+            // $buses = DB::table('buses')->select('buses.*', 'bus_companies.Ten_NX')->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')->paginate(15);
+            $buses = Bus::sortable()->select('buses.*', 'bus_companies.Ten_NX')
+                ->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')
+                ->paginate(15);
+        } else {
+            $buses = Bus::sortable()->select('buses.*', 'bus_companies.Ten_NX')->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')
+                ->where('buses.So_xe', 'like', "%$search_text%")
+                ->orwhere('buses.IdXe', 'like', "%$search_text%")
+                ->orWhere('buses.Doi_xe', 'like', "%$search_text%")
+                ->orWhere('buses.Loai_xe', 'like', "%$search_text%")
+                ->orWhere('bus_companies.Ten_NX', 'like', "%$search_text%")
+                ->paginate(15);
+        }
+
+        $buses = $buses->appends([
+            'search' => $search_text,
+            'sort' => $request['sort'] ?? 'IdXe',
+            'direction' => $request['direction'] ?? 'asc'
+        ]);
+
+
+        /*get() allow you to use chaining methods while all() do not */
         return view('buses.index', [
             'buses' => $buses,
+            'search' => $search_text
         ]);
     }
 
@@ -59,9 +85,9 @@ class AdminBusesController extends Controller
             'So_xe' => 'required|regex:/^[0-9]{2}[A-Z]{1}-[0-9]{4,5}$/|unique:buses',
             'Doi_xe' => 'required|numeric|between:1990,2022',
             'So_Cho_Ngoi' => 'required|numeric|between:29,45',
-            'IdNX' => 'required|exists:bus_companies,IdNX',
+            // IdNX phải tồn tại trong bảng bus_companies và phải giống với IdNX của user đang đăng nhập
+            'IdNX' => 'required|exists:bus_companies,IdNX|in:' . Auth::user()->IdNX,
         ]);
-
 
         $count = DB::table('buses')->count() + 1;
         while (true) {
@@ -112,6 +138,10 @@ class AdminBusesController extends Controller
      */
     public function edit($IdXe)
     {
+        // Không cho phép sửa xe không thuộc quyền quản lý của user đang đăng nhập
+        if (Auth::user()->IdNX != NULL && Auth::user()->IdNX != Bus::where('IdXe', $IdXe)->firstOrFail()->IdNX)
+            return redirect()->route('buses.show', $IdXe)->with('error', 'Bạn không thể thực hiện thao tác này!');
+
         return view('buses.edit', [
             'bus' => Bus::where('IdXe', $IdXe)->firstOrFail()
         ]);
@@ -126,7 +156,6 @@ class AdminBusesController extends Controller
      */
     public function update(Request $request, $IdXe)
     {
-
         $request->validate([
             'So_xe' => 'required|regex:/^[0-9]{2}[A-Z]{1}-[0-9]{4,5}$/|unique:buses,So_xe,' . $IdXe . ',IdXe',
             'Doi_xe' => 'required|numeric|between:1990,2022',
@@ -151,6 +180,10 @@ class AdminBusesController extends Controller
      */
     public function destroy($IdXe)
     {
+        // Không cho phép xóa xe không thuộc quyền quản lý của user đang đăng nhập
+        if (Auth::user()->IdNX != NULL && Auth::user()->IdNX != Bus::where('IdXe', $IdXe)->firstOrFail()->IdNX)
+            return redirect()->route('buses.show', $IdXe)->with('error', 'Bạn không thể thực hiện thao tác này!');
+
         $trips = DB::table('trips')->where('IdXe', $IdXe)->get()->toArray();
 
         $tickets = array();

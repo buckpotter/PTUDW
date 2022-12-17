@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class Bus extends Model
 {
-    use HasFactory;
+    use HasFactory, Sortable;
 
     // Nếu không dùng $id thì phải khai báo $primaryKey
     // Nếu $primaryKey không phải số thì phải khai báo $keyType
-    protected $primaryKey = 'So_xe';
+    protected $primaryKey = 'IdXe';
     protected $keyType = 'string';
 
 
@@ -27,6 +28,16 @@ class Bus extends Model
         'Doi_xe',
         'Loai_xe',
         'So_Cho_Ngoi',
+    ];
+
+    public $sortable = [
+        'IdXe',
+        'So_xe',
+        'IdNX',
+        'Doi_xe',
+        'Loai_xe',
+        'So_Cho_Ngoi',
+        
     ];
 
     public function busCompany()

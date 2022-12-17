@@ -1,6 +1,7 @@
 <x-layout>
 
   <x-flash-message />
+  <x-error-flash-message />
 
   <div class="flex">
     <h1 class="header mr-auto"> Xe {{ $bus->IdXe }}</h1>
@@ -10,25 +11,33 @@
     </div>
   </div>
 
-  <div class="flex gap-4">
-
-
-    <div class="flex flex-col">
-      <span>Số xe:</span>
-      <span>Đời xe</span>
-      <span>Loại xe</span>
-      <span>Số ghế</span>
-      <span>Thuộc nhà xe:</span>
-    </div>
-
-    <div class="flex flex-col">
-      <span>{{ $bus->So_xe }}</span>
-      <span>{{ $bus->Doi_xe }}</span>
-      <span>{{ $bus->Loai_xe }}</span>
-      <span>{{ $bus->So_Cho_Ngoi }} ghế</span>
-      <span>{{ $bus->Ten_NX }}</span>
-    </div>
-  </div>
+  <table class="sub-table lg:w-1/2 w-[90%]">
+    <caption class="header">
+      Xe {{ $bus->So_xe }}
+    </caption>
+    <tbody>
+      <tr>
+        <th>Số xe</th>
+        <td>{{ $bus->So_xe }}</td>
+      </tr>
+      <tr>
+        <th>Đời xe</th>
+        <td>{{ $bus->Doi_xe }}</td>
+      </tr>
+      <tr>
+        <th>Loại xe</th>
+        <td>{{ $bus->Loai_xe }}</td>
+      </tr>
+      <tr>
+        <th>Số ghế</th>
+        <td>{{ $bus->So_Cho_Ngoi }} ghế</td>
+      </tr>
+      <tr>
+        <th>Thuộc nhà xe</th>
+        <td>{{ $bus->Ten_NX }}</td>
+      </tr>
+    </tbody>
+  </table>
 
 
 </x-layout>
