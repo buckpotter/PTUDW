@@ -2,38 +2,44 @@
 
   <h1 class="header">Chỉnh sửa thông người dùng</h1>
 
-  <form action="{{ route('normal_users.update', $normal_user->IdUser) }}" method="POST" enctype="multipart/form-data" class="max-w-[500px] my-4">
-    @csrf
+  <x-form>
     @method('PUT')
+    <x-slot name="action">{{ route('normal_users.update', $normal_user->IdUser) }}</x-slot>
+    <x-slot name="header">Người dùng {{ $normal_user->IdUser }}</x-slot>
 
-    <div class="flex justify-between">
-      <label for="HoTen">Họ tên:</label>
-      <input class="mb-2" type="text" name="HoTen" value="{{ $normal_user->HoTen }}">
-    </div>
+    <x-input-floating-label>
+      <x-slot name="type">text</x-slot>
+      <x-slot name="inputName">HoTen</x-slot>
+      <x-slot name="value">{{ $normal_user->HoTen }}</x-slot>
+      Họ tên
+    </x-input-floating-label>
 
-    <div class="flex justify-between">
-      <label for="email">Email:</label>
-      <input type="text" class="mb-2" name="email" value="{{ $normal_user->email }}" disabled>
-    </div>
+    <x-input-floating-label>
+      <x-slot name="type">email</x-slot>
+      <x-slot name="inputName">email</x-slot>
+      <x-slot name="value">{{ $normal_user->email }}</x-slot>
+      Email
+    </x-input-floating-label>
 
-    <div class="flex justify-between">
-      <label for="sdt">Số điện thoại:</label>
-      <input class="mb-2" type="text" name="sdt" value="{{ $normal_user->sdt }}">
-    </div>
+    <x-input-floating-label>
+      <x-slot name="type">text</x-slot>
+      <x-slot name="inputName">sdt</x-slot>
+      <x-slot name="value">{{ $normal_user->sdt }}</x-slot>
+      Số điện thoại
+    </x-input-floating-label>
 
-    <button class="p-2 cursor-pointer bg-[#537EC5] hover:opacity-70 hover:scale-105 duration-100" type="submit">
-      Lưu thay đổi
-    </button>
+    <x-submit-btn>Lưu</x-submit-btn>
+  </x-form>
 
-    <div>
-      @error('HoTen')
-      <div class="text-red-500">{{ $message }}</div>
-      @enderror
-      @error('sdt')
-      <div class="text-red-500">{{ $message }}</div>
-      @enderror
-    </div>
 
-  </form>
+  @if ($errors->any())
+  <div class="mt-4 p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg max-w-[400px] mx-auto" role="alert">
+    <ul>
+      @foreach ($errors->all() as $error)
+      <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+  @endif
 
 </x-layout>

@@ -1,6 +1,7 @@
 <x-layout>
   <!-- Hiển thị thông báo cập nhật thành công nếu có -->
   <x-flash-message />
+  <x-error-flash-message />
 
   <div class="flex">
     <h1 class="header mr-auto">Thông tin người dùng {{ $normal_user->IdUser }}</h1>
@@ -19,7 +20,7 @@
   </div>
   <div>
     <h1 class="sub-header">Lịch sử mua vé</h1>
-    <table class="table-auto">
+    <table class="main-table">
       <thead>
         <tr>
           <th class="px-4 py-2">Mã hóa đơn</th>

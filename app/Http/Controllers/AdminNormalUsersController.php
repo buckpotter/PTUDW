@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ticket;
 use App\Models\NormalUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Builder\FallbackBuilder;
 
 class AdminNormalUsersController extends Controller
@@ -24,21 +24,30 @@ class AdminNormalUsersController extends Controller
      */
     public function index(Request $request)
     {
-        // $search_text = $request['search'] ?? "";
-        // $normal_users = NULL;
+        $search_text = $request['search'] ?? "";
+        $normal_users = NULL;
 
-        // if ($search_text == "") {
-        //     $normal_users = NormalUser::paginate(15);
-        // } else {
-        //     $normal_users = NormalUser::where('HoTen', 'like', "%$search_text%")
-        //         ->orwhere('email', 'like', "%$search_text%")
-        //         ->orWhere('sdt', 'like', "%$search_text%")
-        //         ->paginate(15);
-        // }
+        if ($search_text == "") {
+            $normal_users = NormalUser::sortable()->paginate(15);
+        } else {
+            $normal_users = NormalUser::sortable()
+                ->where('HoTen', 'like', "%$search_text%")
+                ->orwhere('email', 'like', "%$search_text%")
+                ->orWhere('sdt', 'like', "%$search_text%")
+                ->orWhere('IdUser', 'like', "%$search_text%")
+                ->paginate(15);
+        }
+
+        // Buộc phải có để truyền thêm tham số search vào url, nếu không khi chuyển trang sẽ mất tham số search
+        $normal_users->appends([
+            'search' => $search_text,
+            'sort' => $request->sort ?? 'IdUser',
+            'direction' => $request->direction ?? 'asc'
+        ]);
 
         return view('normal_users.index', [
-            'normal_users' => NormalUser::paginate(15),
-            // 'search' => $search_text,
+            'normal_users' => $normal_users,
+            'search' => $search_text,
         ]);
     }
 
@@ -49,6 +58,9 @@ class AdminNormalUsersController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->IdNX != NULL)
+            return redirect()->route('normal_users.index')->with('error', 'Bạn không thể thực hiện thao tác này!');
+
         return view('normal_users.create');
     }
 
@@ -123,6 +135,9 @@ class AdminNormalUsersController extends Controller
      */
     public function edit($IdUser)
     {
+        if (Auth::user()->IdNX != NULL)
+            return redirect()->route('normal_users.show', $IdUser)->with('error', 'Bạn không thể thực hiện thao tác này!');
+
         return view('normal_users.edit', [
             'normal_user' => NormalUser::findOrFail($IdUser),
         ]);
@@ -160,6 +175,8 @@ class AdminNormalUsersController extends Controller
      */
     public function destroy($IdUser)
     {
+        if (Auth::user()->IdNX != NULL)
+            return redirect()->route('normal_users.show', $IdUser)->with('error', 'Bạn không thể thực hiện thao tác này!');
 
         // Xóa các vé của user
         $tickets = DB::table('tickets')

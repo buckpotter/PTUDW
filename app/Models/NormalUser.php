@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class NormalUser extends Model
 {
-    use HasFactory;
+    use HasFactory, Sortable;
     protected $primaryKey = 'IdUser';
     protected $keyType = 'string';
 
@@ -19,6 +20,13 @@ class NormalUser extends Model
         'sdt',
         'image',
         'token'
+    ];
+
+    public $sortable = [
+        'IdUser',
+        'HoTen',
+        'email',
+        'sdt',
     ];
 
     public function rates()
