@@ -36,10 +36,10 @@
         <td>{{ $trip->So_xe }}</td>
         <td>{{ $trip->Ten_NX }}</td>
         <td>
-          {{ $trip->NgayDi }} {{ $trip->GioDi }}
+          {{ date('H:i:s d-m-Y', strtotime($trip->NgayDi . ' ' . $trip->GioDi)) }}
         </td>
         <td>
-          {{ $trip->NgayDen }} {{ $trip->GioDen }}
+          {{ date('H:i:s d-m-Y', strtotime($trip->NgayDen . ' ' . $trip->GioDen)) }}
         <td>{{ number_format($trip->GiaVe ) }} đ</td>
       </tr>
       @endforeach

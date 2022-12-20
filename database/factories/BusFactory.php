@@ -30,7 +30,7 @@ class BusFactory extends Factory
             'Loai_xe' => $this->faker->randomElement(['Giường nằm', 'Ghế ngồi', 'Limousine']),
 
             // 'So_cho_ngoi' => $this->faker->randomElement([24, 29, 32, 45, 50]),
-            'So_cho_ngoi' => 42,
+            'So_cho_ngoi' => 36,
         ];
     }
 }

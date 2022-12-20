@@ -24,7 +24,6 @@
         <th>@sortablelink('Doi_xe', 'Đời xe')<i class="bi bi-arrow-down-up text-sm"></th>
         <th>@sortablelink('Loai_xe', 'Loại xe')<i class="bi bi-arrow-down-up text-sm"></th>
         <th>Số ghế</th>
-        <th>Nhà xe</th>
       </tr>
     </thead>
     <tbody>
@@ -36,7 +35,6 @@
         <td>{{ $bus->Doi_xe }}</td>
         <td>{{ $bus->Loai_xe }}</td>
         <td>{{ $bus->So_Cho_Ngoi }}</td>
-        <td>{{ $bus->Ten_NX }}</td>
       </tr>
       @endforeach
     </tbody>

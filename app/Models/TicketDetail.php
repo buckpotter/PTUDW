@@ -20,6 +20,8 @@ class TicketDetail extends Model
         'TinhTrangVe',
         'NgayBan',
         'GioBan',
+        'created_at',
+        'updated_at',
         // 'GiaVe',
     ];
 
@@ -31,6 +33,8 @@ class TicketDetail extends Model
         'NgayBan',
         'GioBan',
     ];
+
+    public $timestamps = true;
 
     public function ticket()
     {

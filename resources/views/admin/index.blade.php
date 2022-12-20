@@ -82,7 +82,7 @@
           size: 12,
           weight: 'bold'
         }
-      }
+      },
     };
 
     // ticks object cho định dạng tiền tệ cho trục y của chart
@@ -116,7 +116,9 @@
         datasets: [{
           data: data,
           label: "Doanh thu trong năm 2022 theo tháng trên toàn hệ thống",
-          borderWidth: 3,
+          pointRadius: 5,
+          pointBackgroundColor: 'green',
+          // borderWidth: 3,
           fill: true,
           backgroundColor: gradient,
           borderColor: 'lightgreen',
@@ -131,7 +133,17 @@
           }
         },
 
-        plugins: pluginsTop,
+        plugins: {
+          ...pluginsTop,
+          title: {
+            display: true,
+            font: {
+              size: 20,
+              weight: 'bold',
+            },
+            text: 'Doanh thu trên toàn hệ thống trong năm 2022',
+          },
+        },
       }
     });
 
@@ -154,7 +166,7 @@
           label: "Top 10 nhà xe có doanh thu cao nhất trong năm 2022",
           borderWidth: 3,
           fill: true,
-        }]
+        }],
       },
       options: {
         responesive: true,
@@ -166,7 +178,17 @@
           }
         },
 
-        plugins: pluginsCenter
+        plugins: {
+          ...pluginsCenter,
+          title: {
+            display: true,
+            font: {
+              size: 20,
+              weight: 'bold',
+            },
+            text: 'Top 10 nhà xe có doanh thu cao nhất trong năm 2022',
+          },
+        }
       }
     });
 
@@ -233,7 +255,17 @@
           }
         },
 
-        plugins: pluginsCenter,
+        plugins: {
+          ...pluginsCenter,
+          title: {
+            display: true,
+            font: {
+              size: 20,
+              weight: 'bold',
+            },
+            text: 'Top 10 người dùng tiềm năng trên toàn hệ thống',
+          },
+        },
 
         responesive: true,
       }

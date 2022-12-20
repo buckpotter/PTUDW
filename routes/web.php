@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminTripsController;
 use App\Http\Controllers\AdminNormalUsersController;
 use App\Http\Controllers\AdminBusCompaniesController;
 use App\Http\Controllers\AdminTicketDetailsController;
+use App\Http\Controllers\AdminTicketsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,5 +46,8 @@ Route::resources([
     'bus_companies' => AdminBusCompaniesController::class,
     'buses' => AdminBusesController::class,
     'trips' => AdminTripsController::class,
+    'tickets' => AdminTicketsController::class,
     'ticket_details' => AdminTicketDetailsController::class,
 ]);
+
+Route::put('/ticket_details/{IdBanVe}/cancel', [AdminTicketDetailsController::class, 'cancel'])->name('ticket_details.cancel');

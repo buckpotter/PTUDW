@@ -18,7 +18,7 @@ class AdminTripsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->only(['index', 'create', 'store', 'edit', 'update', 'destroy', 'show', 'search']);
+        $this->middleware('auth')->only(['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']);
     }
 
     public function index(Request $request)

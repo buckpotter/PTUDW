@@ -22,14 +22,6 @@
         <td>{{ $ticket_detail->So_xe }}</td>
       </tr>
       <tr>
-        <th>Xuất phát:</th>
-        <td>{{ $ticket_detail->GioDi }} {{ $ticket_detail->NgayDi }}</td>
-      </tr>
-      <tr>
-        <th>Đến (dự kiến):</th>
-        <td>{{ $ticket_detail->GioDen }} {{ $ticket_detail->NgayDen }}</td>
-      </tr>
-      <tr>
         <th>Số ghế:</th>
         <td>{{ $ticket_detail->TenChoNgoi }}</td>
       </tr>
@@ -40,6 +32,18 @@
       <tr>
         <th>Thuộc nhà xe:</th>
         <td>{{ $ticket_detail->Ten_NX }}</td>
+      </tr>
+      <tr>
+        <th>Xuất phát:</th>
+        <td>{{ date('H:i d-m-Y', strtotime($ticket_detail->GioDi . ' ' . $ticket_detail->NgayDi)) }}</td>
+      </tr>
+      <tr>
+        <th>Đến (dự kiến):</th>
+        <td>{{ date('H:i d-m-Y', strtotime($ticket_detail->GioDen . ' ' . $ticket_detail->NgayDen)) }}</td>
+      </tr>
+      <tr>
+        <th>Ngày bán:</th>
+        <td>{{ date('H:i:s d-m-Y', strtotime($ticket_detail->created_at)) }}</td>
       </tr>
     </tbody>
   </table>

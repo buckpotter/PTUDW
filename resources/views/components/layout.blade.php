@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="{{ asset('imgs/favicon-16x16.png') }}" type="image/x-icon">
 
   @vite('resources/css/app.css')
 
@@ -77,6 +78,11 @@
               'icon' => '<i class="bi bi-truck mr-2 text-xl"></i>',
               'name' => 'Chuyến xe',
               'link' => '/trips'
+            ),
+            array(
+              'icon' => '<i class="bi bi-receipt-cutoff mr-2 text-xl"></i>',
+              'name' => 'Hóa đơn',
+              'link' => '/tickets'
             ),
             array(
               'icon' => '<i class="bi bi-ticket-detailed-fill mr-2 text-xl"></i>',

@@ -60,6 +60,7 @@ class AdminBusCompaniesController extends Controller
      */
     public function create()
     {
+        // Nếu không phải là admin hệ thống thì không cho tạo nhà xe
         if (Auth::user()->IdNX != NULL)
             return redirect()->route('bus_companies.index')->with('error', 'Bạn không thể thực hiện thao tác này!');
 

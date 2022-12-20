@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class Ticket extends Model
 {
-    use HasFactory;
+    use HasFactory, Sortable;
     protected $primaryKey = 'IdBanVe';
     protected $keyType = 'string';
 
@@ -15,8 +16,19 @@ class Ticket extends Model
         'IdBanVe',
         'IdChuyen',
         'IdUser',
+        'created_at',
+        'updated_at',
         // 'Soluong',
     ];
+
+    public $sortable = [
+        'IdBanVe',
+        'IdChuyen',
+        'IdUser',
+        // 'Soluong',
+    ];
+
+    public $timestamps = true;
 
     public function trip()
     {

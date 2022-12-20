@@ -30,17 +30,15 @@ class AdminBusesController extends Controller
         $buses = NULL;
 
         if ($search_text == "") {
-            // $buses = DB::table('buses')->select('buses.*', 'bus_companies.Ten_NX')->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')->paginate(15);
-            $buses = Bus::sortable()->select('buses.*', 'bus_companies.Ten_NX')
-                ->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')
+            $buses = Bus::sortable()->select('buses.*')
                 ->paginate(15);
         } else {
-            $buses = Bus::sortable()->select('buses.*', 'bus_companies.Ten_NX')->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')
+            $buses = Bus::sortable()->select('buses.*')
+                ->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')
                 ->where('buses.So_xe', 'like', "%$search_text%")
                 ->orwhere('buses.IdXe', 'like', "%$search_text%")
                 ->orWhere('buses.Doi_xe', 'like', "%$search_text%")
                 ->orWhere('buses.Loai_xe', 'like', "%$search_text%")
-                ->orWhere('bus_companies.Ten_NX', 'like', "%$search_text%")
                 ->paginate(15);
         }
 

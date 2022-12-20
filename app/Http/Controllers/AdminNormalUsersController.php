@@ -14,7 +14,7 @@ class AdminNormalUsersController extends Controller
     // middleware
     public function __construct()
     {
-        $this->middleware('auth')->only(['index', 'create', 'store', 'edit', 'update', 'destroy', 'show', 'search']);
+        $this->middleware('auth')->only(['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use DateTime;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,11 +18,23 @@ class TicketFactory extends Factory
      */
     public function definition()
     {
+        $IdBanVe = 'TK' . $this->faker->unique()->numberBetween(20001, 30000);
+        $IdChuyen =  'T' . $this->faker->numberBetween(1, 7000);
+        // Lấy ngày đi
+        $ngayDi = DB::table('trips')->select('NgayDi')
+            ->where('trips.IdChuyen', '=', $IdChuyen)
+            ->value('NgayDi');
+
+        // Ramdom ngày bán ở giữa ngày đi và ngày đi -15 days
+        $ngayBan = $this->faker->dateTimeBetween($ngayDi . ' -15 days', $ngayDi);
+
+        $thoiDiemBan = $ngayBan->format('Y-m-d H:i:s');
         return [
-            'IdBanVe' => 'TK' . $this->faker->unique()->numberBetween(1, 10000),
-            'IdChuyen' => 'T' . $this->faker->numberBetween(1, 7000),
+            'IdBanVe' => $IdBanVe,
+            'IdChuyen' => $IdChuyen,
             'IdUser' => 'NU' . $this->faker->numberBetween(1, 10000),
-            // 'Soluong' => $this->faker->numberBetween(1, 10),
+            'created_at' => new DateTime($thoiDiemBan),
+            'updated_at' => new DateTime($thoiDiemBan),
         ];
     }
 }

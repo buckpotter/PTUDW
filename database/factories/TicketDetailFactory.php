@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,7 +22,6 @@ class TicketDetailFactory extends Factory
         ini_set('memory_limit', '2048M');
         $IdBanVe = '';
         $soLuong = '';
-        // $soChoNgoi = '';
         $TenChoNgoi = '';
 
         do {
@@ -32,20 +32,13 @@ class TicketDetailFactory extends Factory
                 ->where('tickets.IdBanVe', '=', $IdBanVe)
                 ->count();
 
-            // Lấy số ghế
-            // $soChoNgoi = DB::table('buses')
-            //     ->select('So_Cho_Ngoi')
-            //     ->join('trips', 'buses.IdXe', '=', 'trips.IdXe')
-            //     ->join('tickets', 'trips.IdChuyen', '=', 'tickets.IdChuyen')
-            //     ->where('tickets.IdBanVe', '=', $IdBanVe)->value('So_Cho_Ngoi');
-
-            if ($soLuong < 42)
+            if ($soLuong < 36)
                 break;
         } while (true);
 
 
         while (true) {
-            $TenChoNgoi = 'A' . $this->faker->numberBetween(1, 42);
+            $TenChoNgoi = 'A' . $this->faker->numberBetween(1, 36);
             $check = DB::table('ticket_details')
                 ->where('IdBanVe', '=', $IdBanVe)
                 ->where('TenChoNgoi', '=', $TenChoNgoi)
@@ -55,35 +48,19 @@ class TicketDetailFactory extends Factory
                 break;
         }
 
-
-        // Lấy ngày đi
-        $ngayDi = DB::table('ticket_details')->select('NgayDi')
-            ->join('tickets', 'ticket_details.IdBanVe', '=', 'tickets.IdBanVe')
-            ->join('trips', 'tickets.IdChuyen', '=', 'trips.IdChuyen')
-            ->where('tickets.IdBanVe', '=', $IdBanVe)->value('NgayDi');
-
-        // Lấy giờ đi
-        $gioDi = DB::table('ticket_details')->select('GioDi')
-            ->join('tickets', 'ticket_details.IdBanVe', '=', 'tickets.IdBanVe')
-            ->join('trips', 'tickets.IdChuyen', '=', 'trips.IdChuyen')
-            ->where('tickets.IdBanVe', '=', $IdBanVe)->value('GioDi');
-
-        // Random ngày bán giữa (ngày đi -15) và ngày đi
-        $ngayBan = $this->faker->dateTimeBetween('-15 days', $ngayDi);
-
-        // Random giờ bán
-        $gioBan = $this->faker->time();
-        if ($ngayBan === $ngayDi) {
-            // nếu ngày đi === ngày bán thì giờ bán phải <= giờ đi
-            $gioBan = $this->faker->time('H:i:s', $gioDi);
-        }
+        $thoiDiemBan = DB::table('tickets')
+            ->select('created_at')
+            ->where('tickets.IdBanVe', '=', $IdBanVe)
+            ->value('created_at');
 
         array_push(self::$arr, $IdBanVe);
 
+        // Lấy pttt của vé trước đó (nếu có)
         $temp = DB::table('ticket_details')
-            ->select('pttt')
-            ->where('ticket_details.IdBanVe', '=', $IdBanVe)
+            ->where('IdBanVe', '=', $IdBanVe)
+            ->orderBy('created_at', 'asc')
             ->first();
+
         $pttt = '';
         // Nếu pttt === null (chưa có vé nào bán) thì random pttt
         if ($temp === null) {
@@ -95,10 +72,12 @@ class TicketDetailFactory extends Factory
             'IdCTBV' => 'TD' . count(self::$arr),
             'IdBanVe' => $IdBanVe,
             'TenChoNgoi' => $TenChoNgoi,
-            'TinhTrangVe' => $this->faker->randomElement(['Đã hoàn thành', 'Chưa hoàn thành', 'Đã hủy']),
-            'NgayBan' => $ngayBan,
-            'GioBan' => $gioBan,
-            'pttt' => $pttt
+            'TinhTrangVe' => $this->faker->randomElement(['Đã hoàn thành', 'Chưa hoàn thành', 'Đã hủy', 'Chờ xác nhận']),
+            // 'NgayBan' => date('Y-m-d', strtotime($thoiDiemBan)),
+            // 'GioBan' => date('H:i:s', strtotime($thoiDiemBan)),
+            'pttt' => $pttt,
+            'created_at' => new DateTime($thoiDiemBan),
+            'updated_at' => new DateTime($thoiDiemBan)
         ];
     }
 }

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('IdBanVe', 10);
             $table->string('TenChoNgoi', 10);
             $table->string('TinhTrangVe', 50);
-            $table->date('NgayBan');
-            $table->time('GioBan');
+            // $table->date('NgayBan');
+            // $table->time('GioBan');
             $table->string('pttt', 50);
             // $table->integer('GiaVe');
             $table->timestamps();
