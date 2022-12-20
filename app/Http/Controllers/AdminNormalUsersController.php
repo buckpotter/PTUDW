@@ -119,6 +119,7 @@ class AdminNormalUsersController extends Controller
             ->join('ticket_details', 'tickets.IdBanVe', '=', 'ticket_details.IdBanVe')
             ->join('bus_routes', 'trips.IdTuyen', '=', 'bus_routes.IdTuyen')
             ->where('tickets.IdUser', '=', $IdUser)
+            ->select('tickets.*', 'ticket_details.TenChoNgoi', 'ticket_details.IdCTBV', 'TenTuyen', 'So_xe', 'pttt', 'TinhTrangVe', 'GiaVe')
             ->paginate(10);
 
         return view('normal_users.show', [

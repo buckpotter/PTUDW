@@ -202,6 +202,13 @@ class AdminTripsController extends Controller
         if (Auth::user()->IdNX != NULL && Auth::user()->IdNX != Trip::join('buses', 'trips.IdXe', '=', 'buses.IdXe')->where('Trips.IdChuyen', $IdChuyen)->select('buses.IdNX')->first()->IdNX)
             return redirect()->route('trips.show', $IdChuyen)->with('error', 'Bạn không thể thực hiện thao tác này!');
 
+
+        // Nếu ngày giờ đi của chuyến đã qua hiện tại thì không cho sửa 
+        $trip = Trip::find($IdChuyen);
+        if (strtotime($trip->NgayDi . ' ' . $trip->GioDi) < strtotime(date('Y-m-d H:i:s')))
+            return redirect()->route('trips.show', $IdChuyen)->with('error', 'Chuyến xe này đã khởi hành/ đã hoàn thành. Bạn không thể sửa!');
+
+
         $cities = [
             'Hòa Bình', 'Sơn La', 'Điện Biên', 'Lai Châu', 'Lào Cai', 'Yên Bái', 'Phú Thọ', 'Hà Giang', 'Tuyên Quang', 'Cao Bằng', 'Bắc Kạn', 'Thái Nguyên', 'Lạng Sơn', 'Bắc Giang', 'Quảng Ninh', 'Hà Nội', 'Bắc Ninh', 'Hà Nam', 'Hải Dương', 'Hải Phòng', 'Hưng Yên', 'Nam Định', 'Thái Bình', 'Vĩnh Phúc', 'Ninh Bình', 'Thanh Hóa', 'Nghệ An', 'Hà Tĩnh', 'Quảng Bình', 'Quảng Trị', 'Huế', 'Đà Nẵng', 'Quảng Nam', 'Quảng Ngãi', 'Bình Định', 'Phú Yên', 'Khánh Hòa', 'Ninh Thuận', 'Bình Thuận', 'TP. Hồ Chí Minh', 'Vũng Tàu', 'Bình Dương', 'Bình Phước', 'Đồng Nai', 'Tây Ninh', 'An Giang', 'Bạc Liêu', 'Bến Tre', 'Cà Mau', 'Cần Thơ', 'Đồng Tháp', 'Hậu Giang', 'Kiên Giang', 'Long An', 'Sóc Trăng', 'Tiền Giang', 'Trà Vinh', 'Vĩnh Long', 'Kon Tum', 'Gia Lai', 'Đắk Lắk', 'Đắk Nông', 'Lâm Đồng',
         ];

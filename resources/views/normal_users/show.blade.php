@@ -48,7 +48,7 @@
           <td class="border px-4 py-2">{{ $order->So_xe }}</td>
           <td class="border px-4 py-2">{{ $order->TenChoNgoi }}</td>
           <td class="border px-4 py-2"> {{ $gia }}</td>
-          <td class="border px-4 py-2">{{ $order->NgayBan }} {{ $order->GioBan }}</td>
+          <td class="border px-4 py-2">{{ date('H:i:s d-m-Y', strtotime($order->created_at)) }}</td>
           <td class="border px-4 py-2">{{ $order->pttt }}</td>
           <td class="border px-4 py-2">{{ $order->TinhTrangVe }}</td>
         </tr>
