@@ -34,7 +34,8 @@ class AdminBusCompaniesController extends Controller
             $busCompanies = BusCompany::sortable()->paginate(15);
         } else {
             $busCompanies = BusCompany::sortable()
-                ->where('Ten_NX', 'like', "%$search_text%")
+                ->where('IdNX', 'like', "%$search_text%")
+                ->orwhere('Ten_NX', 'like', "%$search_text%")
                 ->orwhere('email', 'like', "%$search_text%")
                 ->orWhere('sdt', 'like', "%$search_text%")
                 ->paginate(15);

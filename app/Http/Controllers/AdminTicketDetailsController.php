@@ -23,9 +23,17 @@ class AdminTicketDetailsController extends Controller
 
     public function index(Request $request)
     {
+        // Nếu không có min, max, lower-limit, upper-limit thì gán giá trị mặc định
+        request()->merge([
+            'min' => $request['min'] ?? 0,
+            'max' => $request['max'] ?? 1000000000,
+            'lower-limit' => $request['lower-limit'] ?? '2022-01-01',
+            'upper-limit' => $request['upper-limit'] ?? '2023-12-31',
+        ]);
+
         $request->validate([
             'search' => 'nullable|string',
-            'min' => 'nullable|numeric|gt:0|lt:max',
+            'min' => 'nullable|numeric|gte:0|lt:max',
             'max' => 'nullable|numeric|gt:min',
             'lower-limit' => 'nullable',
             'upper-limit' => 'nullable|after:lower-limit',
