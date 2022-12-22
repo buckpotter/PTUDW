@@ -18,10 +18,11 @@ class TicketDetail extends Model
         'IdBanVe',
         'TenChoNgoi',
         'TinhTrangVe',
-        'NgayBan',
-        'GioBan',
+        // 'NgayBan',
+        // 'GioBan',
         'created_at',
         'updated_at',
+        'note'
         // 'GiaVe',
     ];
 
@@ -30,8 +31,9 @@ class TicketDetail extends Model
         'IdBanVe',
         'TenChoNgoi',
         'TinhTrangVe',
-        'NgayBan',
-        'GioBan',
+        'note'
+        // 'NgayBan',
+        // 'GioBan',
     ];
 
     public $timestamps = true;

@@ -19,12 +19,10 @@ class RateFactory extends Factory
         return [
             'IdRate' => 'R' . $this->faker->unique()->numberBetween(1, 10000),
             'IdNX' => 'BC' . $this->faker->numberBetween(1, 30),
-            // 'IdChuyen' => 'T' . $this->faker->numberBetween(1, 5000),
             'IdUser' => 'NU' . $this->faker->numberBetween(1, 10000),
-            // 'IdCTBV' => 'TD' . $this->faker->numberBetween(1, 10000),
-            'DanhGia' => $this->faker->numberBetween(1, 5),
             'BinhLuan' => $this->faker->text(100),
-            'NgayDanhGia' => $this->faker->dateTimeBetween('-1 years', 'now'),
+            'created_at' => $this->faker->dateTimeBetween('-1 years', 'now'),
+            'updated_at' => $this->faker->dateTimeBetween('-1 years', 'now'),
         ];
     }
 }

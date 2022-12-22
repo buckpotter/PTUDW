@@ -113,12 +113,12 @@ class AdminBusCompaniesController extends Controller
      */
     public function show($IdNX)
     {
-        // Đánh giá nhà xe
-        $rate = Rate::where('IdNX', $IdNX)->select(DB::raw('AVG(DanhGia) as avg'))->first()->avg;
+        // Số lượt đánh giá
+        $rateCount = Rate::where('IdNX', $IdNX)->count();
 
         return view('bus_companies.show', [
             'busCompany' => BusCompany::where('IdNX', $IdNX)->firstOrFail(),
-            'rate' => $rate,
+            'rateCount' => $rateCount,
         ]);
     }
 

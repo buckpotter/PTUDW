@@ -11,11 +11,18 @@
     </div>
   </div>
   <div class="flex flex-col md:flex-row gap-4 items-center justify-center mt-4">
-    <x-avatar>{{ $normal_user->image }} {{ $normal_user->IdUser }}</x-avatar>
+    <!-- <x-avatar>{{ $normal_user->image }} {{ $normal_user->IdUser }}</x-avatar> -->
     <div class="text-xl text-white">
       <p><strong>Tên người dùng: </strong>{{ $normal_user->HoTen }}</p>
       <p><strong>Số điện thoại: </strong>{{ $normal_user->sdt }}</p>
       <p><strong>Email: </strong>{{ $normal_user->email }}</p>
+      <p><strong>Chức năng: </strong>
+        @if ($normal_user->role == 1)
+        Admin
+        @else
+        Người dùng
+        @endif
+      </p>
     </div>
   </div>
   <div>

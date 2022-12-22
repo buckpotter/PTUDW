@@ -21,7 +21,6 @@ return new class extends Migration
             // $table->date('NgayBan');
             // $table->time('GioBan');
             $table->string('pttt', 50);
-            // $table->integer('GiaVe');
             $table->timestamps();
 
             // Foreign key

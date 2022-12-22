@@ -24,6 +24,7 @@
         <th>@sortablelink('HoTen', 'Tên người dùng')<i class="bi bi-arrow-down-up text-sm"></th>
         <th>@sortablelink('email', 'Email')<i class="bi bi-arrow-down-up text-sm"></th>
         <th>@sortablelink('sdt', 'Số điện thoại')<i class="bi bi-arrow-down-up text-sm"></th>
+        <th>@sortablelink('role', 'Chức năng')<i class="bi bi-arrow-down-up text-sm"></th>
       </tr>
     </thead>
     <tbody>
@@ -37,6 +38,13 @@
         <td>{{ $user->HoTen }}</td>
         <td>{{ $user->email }}</td>
         <td>{{ $user->sdt }}</td>
+        <td>
+          @if ($user->role == 1)
+          Quản trị
+          @else
+          Người dùng
+          @endif
+        </td>
       </tr>
       @endforeach
     </tbody>

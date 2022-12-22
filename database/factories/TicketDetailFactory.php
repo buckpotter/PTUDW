@@ -58,7 +58,6 @@ class TicketDetailFactory extends Factory
         // Lấy pttt của vé trước đó (nếu có)
         $temp = DB::table('ticket_details')
             ->where('IdBanVe', '=', $IdBanVe)
-            ->orderBy('created_at', 'asc')
             ->first();
 
         $pttt = '';
@@ -68,13 +67,23 @@ class TicketDetailFactory extends Factory
         } else
             $pttt = $temp->pttt;
 
+
+        // Nếu $thoiDiemBan <= now() thì random tình trạng vé là 'Đã hoàn thành', 'Đã hủy'
+        // Nếu $thoiDiemBan > now() thì random tình trạng vé là 'Chờ xác nhận', 'Đã hủy', 'Đã hoàn thành', 'Chưa hoàn thành'
+        $ttv = '';
+        if (strtotime($thoiDiemBan) <= strtotime(date('Y-m-d H:i:s'))) {
+            // tỉ lệ 7/8 vé đã hoàn thành, 1/8 vé đã hủy
+            $ttv = $this->faker->randomElement(['Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hủy']);
+        } else {
+            // tỉ lệ 2/8 vé chưa hoàn thành, 1/8 vé đã hủy, 3/8 vé đã hoàn thành, 2/8 vé chờ xác nhận
+            $ttv = $this->faker->randomElement(['Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hủy', 'Chưa hoàn thành', 'Chưa hoàn thành', 'Chờ xác nhận', 'Chờ xác nhận']);
+        }
+
         return [
             'IdCTBV' => 'TD' . count(self::$arr),
             'IdBanVe' => $IdBanVe,
             'TenChoNgoi' => $TenChoNgoi,
-            'TinhTrangVe' => $this->faker->randomElement(['Đã hoàn thành', 'Chưa hoàn thành', 'Đã hủy', 'Chờ xác nhận']),
-            // 'NgayBan' => date('Y-m-d', strtotime($thoiDiemBan)),
-            // 'GioBan' => date('H:i:s', strtotime($thoiDiemBan)),
+            'TinhTrangVe' => $ttv,
             'pttt' => $pttt,
             'created_at' => new DateTime($thoiDiemBan),
             'updated_at' => new DateTime($thoiDiemBan)

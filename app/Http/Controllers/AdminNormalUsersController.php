@@ -78,6 +78,7 @@ class AdminNormalUsersController extends Controller
             'email' => 'required|email|unique:normal_users,email',
             'password' => 'required|min:6|max:20|confirmed',
             'sdt' => 'required|regex:/^0[0-9]{9}$/|unique:normal_users,sdt',
+            'role' => 'required|in:0,1',
         ]);
 
         $count = DB::table('normal_users')->count() + 1;
@@ -99,6 +100,7 @@ class AdminNormalUsersController extends Controller
             'email' => $request->email,
             'password' => md5($request->password),
             'sdt' => $request->sdt,
+            'role' => $request->role,
         ]);
 
         return redirect()->route('normal_users.index')->with('message', 'Thêm thành công!');
@@ -156,12 +158,14 @@ class AdminNormalUsersController extends Controller
         $request->validate([
             'HoTen' => 'required',
             'sdt' => 'required|regex:/^0[0-9]{9}$/|unique:normal_users,sdt,' . $IdUser . ',IdUser',
+            'role' => 'required|in:0,1',
         ]);
 
         NormalUser::where('IdUser', $IdUser)
             ->update([
                 'HoTen' => $request->HoTen,
                 'sdt' => $request->sdt,
+                'role' => $request->role,
             ]);
 
         return redirect()->route('normal_users.show', $IdUser)
@@ -199,25 +203,5 @@ class AdminNormalUsersController extends Controller
         NormalUser::findOrFail($IdUser)->delete();
         return redirect()->route('normal_users.index')
             ->with('message', 'Xóa thành công!');
-    }
-
-    public function search(Request $request)
-    {
-        $search_text = $request['search'] ?? "";
-        $normal_users = NULL;
-
-        if ($search_text == "")
-            $normal_users = NormalUser::paginate(15);
-        else {
-            $normal_users = NormalUser::where('HoTen', 'like', "%$search_text%")
-                ->orwhere('email', 'like', "%$search_text%")
-                ->orWhere('sdt', 'like', "%$search_text%")
-                ->paginate(15);
-        }
-
-        return view('normal_users.search', [
-            'normal_users' => $normal_users,
-            'search' => $search_text,
-        ]);
     }
 }

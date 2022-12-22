@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password', 50);
             $table->string('sdt', 10)->unique();
             $table->longText('image')->nullable();
-            $table->longText('token')->nullable();
+            $table->integer('role');
             $table->timestamps();
         });
     }

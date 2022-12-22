@@ -19,7 +19,8 @@ class NormalUser extends Model
         'password',
         'sdt',
         'image',
-        'token'
+        // 'token'
+        'role'
     ];
 
     public $sortable = [

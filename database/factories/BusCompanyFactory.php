@@ -58,8 +58,7 @@ class BusCompanyFactory extends Factory
             'Ten_NX' => $tenNX,
             'sdt' => '0' . $this->faker->regexify('[0-9]{9}'),
             'email' => $emailNX,
-            'DichVu' => $this->faker->randomElement(['Điểm tâm, Xe trung chuyển, Khăn ướt', 'Wifi, Nước suối', 'Điểm tâm, Wifi, Nước suối', 'Xe trung chuyển, Wifi, Nước suối', 'Điểm tâm, Xe trung chuyển, Wifi, Nước suối']),
-            // 'IdRate' => 'R' . $this->faker->numberBetween(1, 10),
+            'DichVu' => $this->faker->randomElement(['Đồ ăn ngon', 'Wifi', 'Xe trung chuyển', 'Phòng riêng', 'Có nhà vệ sinh', 'Đồ ăn ngon, Wifi, Xe trung chuyển, Phòng riêng, Có nhà vệ sinh', 'Đồ ăn ngon, Wifi, Xe trung chuyển, Phòng riêng', 'Đồ ăn ngon, Wifi, Xe trung chuyển', 'Đồ ăn ngon, Wifi', 'Wifi, Xe trung chuyển', 'Wifi, Xe trung chuyển, Phòng riêng', 'Wifi, Xe trung chuyển, Phòng riêng, Có nhà vệ sinh']),
         ];
     }
 }

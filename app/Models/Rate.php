@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 class Rate extends Model
 {
     use HasFactory;
@@ -14,10 +15,12 @@ class Rate extends Model
         'IdRate',
         'IdUser',
         'IdNX',
-        'DanGia',
+        // 'DanGia',
         'BinhLuan',
-        'NgayDanhGia',
+        // 'NgayDanhGia',
     ];
+
+    public $timestamps = true;
 
     public function busCompany()
     {

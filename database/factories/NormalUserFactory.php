@@ -27,8 +27,9 @@ class NormalUserFactory extends Factory
             'HoTen' => $name,
             'email' => $this->faker->unique()->safeEmail(),
             'password' => $this->faker->password(),
-            'sdt' => '0' . $this->faker->unique()->regexify('[0-9]{9}'),
+            'sdt' => $this->faker->unique()->regexify('0[0-9]{9}'),
             'image' => $this->faker->imageUrl(640, 480, 'people', true, 'Faker'),
+            'role' => 0,
         ];
     }
 }

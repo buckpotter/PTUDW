@@ -28,6 +28,12 @@
       Số điện thoại
     </x-input-floating-label>
 
+    <x-input-floating-label>
+      <x-slot name="type">number</x-slot>
+      <x-slot name="inputName">role</x-slot>
+      <x-slot name="value">{{ $normal_user->role }}</x-slot>
+      Chức năng
+    </x-input-floating-label>
     <x-submit-btn>Lưu</x-submit-btn>
   </x-form>
 

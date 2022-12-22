@@ -43,6 +43,13 @@
       Nhập lại mật khẩu
     </x-input-floating-label>
 
+    <x-input-floating-label>
+      <x-slot name="type" min="0" max="0">number</x-slot>
+      <x-slot name="inputName">role</x-slot>
+      <x-slot name="value">{{ old('role') }}</x-slot>
+      Chức năng
+    </x-input-floating-label>
+
     <x-submit-btn>Thêm</x-submit-btn>
   </x-form>
 

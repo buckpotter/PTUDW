@@ -33,8 +33,8 @@
         <td>{{ $busCompany->DichVu }}</td>
       </tr>
       <tr>
-        <th>Đánh giá</th>
-        <td style="color:#FBB454">{{ number_format((float)$rate, 2, '.', '') }} <i class="bi bi-star-fill"></i></td>
+        <th>Lượt đánh giá</th>
+        <td style="color:#FBB454">{{ $rateCount }}</td>
       </tr>
     </tbody>
   </table>

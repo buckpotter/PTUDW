@@ -16,11 +16,8 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->string('IdBanVe', 10)->primary();
             $table->string('IdChuyen', 10);
-            // $table->integer('SDTHanhKhach')->unique();
-            // $table->string('email')->unique();
-            // $table->string('So_xe', 10);
             $table->string('IdUser', 10);
-            // $table->integer('Soluong');
+            $table->longText('note')->nullable();
             $table->timestamps();
 
             // foreign key
