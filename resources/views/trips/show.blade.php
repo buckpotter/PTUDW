@@ -44,6 +44,16 @@
         <td>{{ number_format($trip->GiaVe) }} đ</td>
       </tr>
       <tr>
+        <th>Điểm đón</th>
+        <td>
+          <ol>
+            @foreach ($DiemDon as $d)
+            <li title="{{ $d->DiaChi }}" style="cursor: pointer;">{{ $d->Ten }}</li>
+            @endforeach
+          </ol>
+        </td>
+      </tr>
+      <tr>
         <th>Thuộc nhà xe</th>
         <td>{{ $trip->Ten_NX }}</td>
       </tr>

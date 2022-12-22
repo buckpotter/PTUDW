@@ -184,9 +184,17 @@ class AdminTripsController extends Controller
             ->where('ticket_details.TinhTrangVe', '!=', 'Đã hủy')
             ->count();
 
+        $DiemDon = DB::table('bus_routes')
+            ->join('stops', 'bus_routes.DiaDiemDi', '=', 'stops.DiaDiemDi')
+            ->where('bus_routes.IdTuyen', $trip->IdTuyen)
+            ->select('stops.*')
+            ->get()
+            ->toArray();
+
         return view('trips.show', [
             'trip' => $trip,
             'availableSeats' => $trip->So_Cho_Ngoi - $reservedSeats,
+            'DiemDon' => $DiemDon,
 
         ]);
     }
