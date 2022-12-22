@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\TicketDetail;
-use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Mail\TicketsStatusMail;
+use Dflydev\DotAccessData\Data;
+use Illuminate\Broadcasting\Broadcasters\AblyBroadcaster;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+
+
 
 class AdminTicketDetailsController extends Controller
 {
@@ -113,23 +118,6 @@ class AdminTicketDetailsController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $IdCTBV
-     * @return \Illuminate\Http\Response
-     */
     public function show($IdCTBV)
     {
         $data = DB::table('ticket_details')
@@ -147,18 +135,6 @@ class AdminTicketDetailsController extends Controller
             'ticket_detail' => $data
         ]);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $IdCTBV
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($IdCTBV)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -169,22 +145,26 @@ class AdminTicketDetailsController extends Controller
     public function update(Request $request, $IdCTBV)
     {
         // Không cho phép duyệt vé không thuộc quyền quản lý của nhà xe
-        $IdNX = DB::table('ticket_details')
-            ->where('ticket_details.IdCTBV', $IdCTBV)
-            ->join('tickets', 'ticket_details.IdBanVe', '=', 'tickets.IdBanVe')
-            ->join('trips', 'tickets.IdChuyen', '=', 'trips.IdChuyen')
-            ->join('buses', 'trips.IdXe', '=', 'buses.IdXe')
-            ->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')
-            ->select('bus_companies.IdNX')
-            ->first()
-            ->IdNX;
-        if (Auth::user()->IdNX != NULL && Auth::user()->IdNX != $IdNX) {
-            return redirect()->route('ticket_details.index')->with('error', 'Bạn không có quyền duyệt vé này');
+        if (Auth::user()->IdNX != NULL) {
+            $IdNX = DB::table('ticket_details')
+                ->where('ticket_details.IdCTBV', $IdCTBV)
+                ->join('tickets', 'ticket_details.IdBanVe', '=', 'tickets.IdBanVe')
+                ->join('trips', 'tickets.IdChuyen', '=', 'trips.IdChuyen')
+                ->join('buses', 'trips.IdXe', '=', 'buses.IdXe')
+                ->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')
+                ->select('bus_companies.IdNX')
+                ->first()
+                ->IdNX;
+            if (Auth::user()->IdNX != $IdNX)
+                return redirect()->route('ticket_details.index')->with('error', 'Bạn không có quyền duyệt vé này');
         }
 
         DB::table('ticket_details')->where('IdCTBV', $IdCTBV)->update([
             'TinhTrangVe' => 'Chưa hoàn thành'
         ]);
+
+        // gửi email thông báo đã hủy vé cho người dùng
+        self::sendMail($IdCTBV, 'Duyệt');
 
         return redirect()->route('ticket_details.index')->with('message', 'Duyệt thành công vé ' . $IdCTBV);
     }
@@ -192,34 +172,52 @@ class AdminTicketDetailsController extends Controller
     public function cancel($IdCTBV)
     {
         // Không cho phép hủy vé không thuộc quyền quản lý của nhà xe
-        $IdNX = DB::table('ticket_details')
-            ->where('ticket_details.IdCTBV', $IdCTBV)
-            ->join('tickets', 'ticket_details.IdBanVe', '=', 'tickets.IdBanVe')
-            ->join('trips', 'tickets.IdChuyen', '=', 'trips.IdChuyen')
-            ->join('buses', 'trips.IdXe', '=', 'buses.IdXe')
-            ->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')
-            ->select('bus_companies.IdNX')
-            ->first()
-            ->IdNX;
-        if (Auth::user()->IdNX != NULL && Auth::user()->IdNX != $IdNX) {
-            return redirect()->route('ticket_details.index')->with('error', 'Bạn không có quyền hủy vé này');
+        if (Auth::user()->IdNX != NULL) {
+            $IdNX = DB::table('ticket_details')
+                ->where('ticket_details.IdCTBV', $IdCTBV)
+                ->join('tickets', 'ticket_details.IdBanVe', '=', 'tickets.IdBanVe')
+                ->join('trips', 'tickets.IdChuyen', '=', 'trips.IdChuyen')
+                ->join('buses', 'trips.IdXe', '=', 'buses.IdXe')
+                ->join('bus_companies', 'buses.IdNX', '=', 'bus_companies.IdNX')
+                ->select('bus_companies.IdNX')
+                ->first()
+                ->IdNX;
+            if (Auth::user()->IdNX != $IdNX)
+                return redirect()->route('ticket_details.index')->with('error', 'Bạn không có quyền hủy vé này');
         }
 
         DB::table('ticket_details')->where('IdCTBV', $IdCTBV)->update([
             'TinhTrangVe' => 'Đã hủy'
         ]);
 
+        // gửi email thông báo đã hủy vé cho người dùng
+        self::sendMail($IdCTBV, 'Hủy');
+
         return redirect()->route('ticket_details.index')->with('message', 'Hủy thành công vé ' . $IdCTBV);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $IdCTBV
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($IdCTBV)
+    public function sendMail($IdCTBV, $status)
     {
-        //
+        // gửi email thông báo đã hủy vé cho người dùng
+        $IdBanVe = DB::table('ticket_details')
+            ->where('ticket_details.IdCTBV', $IdCTBV)
+            ->join('tickets', 'ticket_details.IdBanVe', '=', 'tickets.IdBanVe')
+            ->select('tickets.IdBanVe')
+            ->first()
+            ->IdBanVe;
+
+        $email = DB::table('normal_users')
+            ->join('tickets', 'normal_users.IdUser', '=', 'tickets.IdUser')
+            ->where('tickets.IdBanVe', $IdBanVe)
+            ->select('normal_users.email')
+            ->first()
+            ->email;
+
+        $mailData = [
+            'IdCTBV' => $IdCTBV,
+            'IdBanVe' => $IdBanVe,
+            'status' => $status,
+        ];
+        Mail::to("$email")->send(new TicketsStatusMail($mailData));
     }
 }

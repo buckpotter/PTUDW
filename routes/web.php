@@ -11,6 +11,8 @@ use App\Http\Controllers\AdminNormalUsersController;
 use App\Http\Controllers\AdminBusCompaniesController;
 use App\Http\Controllers\AdminTicketDetailsController;
 use App\Http\Controllers\AdminTicketsController;
+use App\Http\Controllers\TicketsStatusMailController;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
