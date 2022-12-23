@@ -25,8 +25,15 @@ class TicketFactory extends Factory
             ->where('trips.IdChuyen', '=', $IdChuyen)
             ->value('NgayDi');
 
-        // Ramdom ngày bán ở giữa ngày đi và ngày đi -15 days
+        // Đảm bảo ngày bán vé < ngày đi và ngày bán vé < now
         $ngayBan = $this->faker->dateTimeBetween($ngayDi . ' -15 days', $ngayDi);
+        // Nếu ngày đi < now thì random 15 ngày trước ngày đi
+        if ($ngayDi < now()) {
+            $ngayBan = $this->faker->dateTimeBetween($ngayDi . ' -15 days', $ngayDi);
+        } else {
+            // nếu ngày đi > now thì random 3 tháng trước kể từ now
+            $ngayBan = $this->faker->dateTimeBetween(now() . ' -3 months', now());
+        }
 
         $thoiDiemBan = $ngayBan->format('Y-m-d H:i:s');
         return [

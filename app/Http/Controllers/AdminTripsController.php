@@ -170,6 +170,7 @@ class AdminTripsController extends Controller
      */
     public function show($IdChuyen)
     {
+        // Lấy thông tin chuyến xe
         $trip = DB::table('trips')
             ->join('buses', 'trips.IdXe', '=', 'buses.IdXe')
             ->join('bus_routes', 'trips.IdTuyen', '=', 'bus_routes.IdTuyen')
@@ -178,12 +179,14 @@ class AdminTripsController extends Controller
             ->where('trips.IdChuyen', $IdChuyen)
             ->first();
 
+        // Lấy số vé đã đặt
         $reservedSeats = DB::table('ticket_details')
             ->join('tickets', 'ticket_details.IdBanVe', '=', 'tickets.IdBanVe')
             ->where('tickets.IdChuyen', $IdChuyen)
             ->where('ticket_details.TinhTrangVe', '!=', 'Đã hủy')
             ->count();
 
+        // Lấy điểm đón
         $DiemDon = DB::table('bus_routes')
             ->join('stops', 'bus_routes.DiaDiemDi', '=', 'stops.DiaDiemDi')
             ->where('bus_routes.IdTuyen', $trip->IdTuyen)
@@ -207,6 +210,7 @@ class AdminTripsController extends Controller
      */
     public function edit($IdChuyen)
     {
+        // Kiểm tra xem người dùng có phải là nhà xe của chuyến xe này không hoặc là quản trị viên hệ thống
         if (Auth::user()->IdNX != NULL && Auth::user()->IdNX != Trip::join('buses', 'trips.IdXe', '=', 'buses.IdXe')->where('Trips.IdChuyen', $IdChuyen)->select('buses.IdNX')->first()->IdNX)
             return redirect()->route('trips.show', $IdChuyen)->with('error', 'Bạn không thể thực hiện thao tác này!');
 
@@ -220,6 +224,8 @@ class AdminTripsController extends Controller
         $cities = [
             'Hòa Bình', 'Sơn La', 'Điện Biên', 'Lai Châu', 'Lào Cai', 'Yên Bái', 'Phú Thọ', 'Hà Giang', 'Tuyên Quang', 'Cao Bằng', 'Bắc Kạn', 'Thái Nguyên', 'Lạng Sơn', 'Bắc Giang', 'Quảng Ninh', 'Hà Nội', 'Bắc Ninh', 'Hà Nam', 'Hải Dương', 'Hải Phòng', 'Hưng Yên', 'Nam Định', 'Thái Bình', 'Vĩnh Phúc', 'Ninh Bình', 'Thanh Hóa', 'Nghệ An', 'Hà Tĩnh', 'Quảng Bình', 'Quảng Trị', 'Huế', 'Đà Nẵng', 'Quảng Nam', 'Quảng Ngãi', 'Bình Định', 'Phú Yên', 'Khánh Hòa', 'Ninh Thuận', 'Bình Thuận', 'TP. Hồ Chí Minh', 'Vũng Tàu', 'Bình Dương', 'Bình Phước', 'Đồng Nai', 'Tây Ninh', 'An Giang', 'Bạc Liêu', 'Bến Tre', 'Cà Mau', 'Cần Thơ', 'Đồng Tháp', 'Hậu Giang', 'Kiên Giang', 'Long An', 'Sóc Trăng', 'Tiền Giang', 'Trà Vinh', 'Vĩnh Long', 'Kon Tum', 'Gia Lai', 'Đắk Lắk', 'Đắk Nông', 'Lâm Đồng',
         ];
+
+        $cities = sort($cities);
 
         $Tuyen = DB::table('trips')
             ->join('bus_routes', 'trips.IdTuyen', '=', 'bus_routes.IdTuyen')

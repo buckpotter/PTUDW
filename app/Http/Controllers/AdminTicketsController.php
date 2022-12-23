@@ -82,6 +82,7 @@ class AdminTicketsController extends Controller
             $tickets = $tickets->whereDate('tickets.created_at', '>=', $lowerlimit);
         }
 
+        // Áp dụng lọc, tìm kiếm, sắp xếp cho phân trang
         $tickets = $tickets->paginate(15)->appends([
             'min' => $min,
             'max' => $max,
@@ -130,6 +131,7 @@ class AdminTicketsController extends Controller
      */
     public function show($IdBanVe)
     {
+        // Lấy thông tin hóa đơn
         $ticket = DB::table('tickets')
             ->join('trips', 'tickets.IdChuyen', '=', 'trips.IdChuyen')
             ->join('bus_routes', 'trips.IdTuyen', '=', 'bus_routes.IdTuyen')
@@ -140,12 +142,14 @@ class AdminTicketsController extends Controller
             ->groupBy('tickets.IdBanVe', 'tickets.IdChuyen', 'trips.GiaVe', 'bus_routes.TenTuyen', 'normal_users.HoTen', 'normal_users.sdt', 'normal_users.email', 'tickets.created_at')
             ->first();
 
+        // Lấy thông tin các ghế đã đặt
         $seats = DB::table('ticket_details')
             ->join('tickets', 'ticket_details.IdBanVe', '=', 'tickets.IdBanVe')
             ->where('ticket_details.IdBanVe', '=', $IdBanVe)
             ->select('TenChoNgoi')
             ->get();
 
+        // Lấy thông tin phương thức thanh toán
         $pttt = DB::table('tickets')
             ->join('ticket_details', 'tickets.IdBanVe', '=', 'ticket_details.IdBanVe')
             ->where('tickets.IdBanVe', '=', $IdBanVe)
@@ -153,6 +157,7 @@ class AdminTicketsController extends Controller
             ->first()
             ->pttt;
 
+        // Lấy thông tin xe
         $bus = DB::table('tickets')
             ->join('trips', 'tickets.IdChuyen', '=', 'trips.IdChuyen')
             ->join('buses', 'trips.IdXe', '=', 'buses.IdXe')
@@ -161,6 +166,7 @@ class AdminTicketsController extends Controller
             ->select('buses.So_xe', 'bus_companies.Ten_NX')
             ->first();
 
+        // Lấy thông tin ngày giờ xuất phát
         $XuatPhat = DB::table('tickets')
             ->join('trips', 'tickets.IdChuyen', '=', 'trips.IdChuyen')
             ->select('NgayDi', 'GioDi')
