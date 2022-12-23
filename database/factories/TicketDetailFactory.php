@@ -68,14 +68,31 @@ class TicketDetailFactory extends Factory
             $pttt = $temp->pttt;
 
 
-        // Nếu $thoiDiemBan <= now() thì random tình trạng vé là 'Đã hoàn thành', 'Đã hủy'
-        // Nếu $thoiDiemBan > now() thì random tình trạng vé là 'Chờ xác nhận', 'Đã hủy', 'Đã hoàn thành', 'Chưa hoàn thành'
+        // Nếu $ngayDi <= now() thì random tình trạng vé là 'Đã hoàn thành', 'Đã hủy'
+        // Nếu $ngayDi > now() thì random tình trạng vé là 'Chờ xác nhận', 'Đã hủy', 'Đã hoàn thành', 'Chưa hoàn thành'
         $ttv = '';
-        if (strtotime($thoiDiemBan) <= strtotime(date('Y-m-d H:i:s'))) {
-            // tỉ lệ 7/8 vé đã hoàn thành, 1/8 vé đã hủy
+        // Lấy chuyến xe của
+        $IdChuyen = DB::table('tickets')
+            ->select('IdChuyen')
+            ->where('tickets.IdBanVe', '=', $IdBanVe)
+            ->first()
+            ->IdChuyen;
+
+        // Lấy ngày đi của chuyến xe
+        $ngayDi = DB::table('trips')
+            ->select('NgayDi', 'GioDi')
+            ->where('trips.IdChuyen', '=', $IdChuyen)
+            ->first();
+
+        // Chuyển ngày đi thành dạng datetime
+        $ngayDi = date('Y-m-d H:i:s', strtotime($ngayDi->NgayDi . ' ' . $ngayDi->GioDi));
+
+        // Seed vé
+        if (strtotime($ngayDi) <= strtotime(date('Y-m-d H:i:s'))) {
+            // tỉ lệ 7/8 vé đã hoàn thành, 1/8 vé đã hủy nếu ngày đi <= now()
             $ttv = $this->faker->randomElement(['Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hủy']);
         } else {
-            // tỉ lệ 2/8 vé chưa hoàn thành, 1/8 vé đã hủy, 3/8 vé đã hoàn thành, 2/8 vé chờ xác nhận
+            // tỉ lệ 2/8 vé chưa hoàn thành, 1/8 vé đã hủy, 3/8 vé đã hoàn thành, 2/8 vé chờ xác nhận nếu ngày đi > now()
             $ttv = $this->faker->randomElement(['Đã hoàn thành', 'Đã hoàn thành', 'Đã hoàn thành', 'Đã hủy', 'Chưa hoàn thành', 'Chưa hoàn thành', 'Chờ xác nhận', 'Chờ xác nhận']);
         }
 
